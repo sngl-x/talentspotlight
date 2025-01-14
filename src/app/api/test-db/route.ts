@@ -14,6 +14,12 @@ export async function GET() {
     return NextResponse.json({ success: true, timestamp: res.rows[0].now });
   } catch (error) {
     console.error('Database connection error:', error);
-    return NextResponse.json({ success: false, error: error.message });
+
+    // Refined catch block
+    const errorMessage = error instanceof Error
+      ? error.message
+      : 'An unknown error occurred';
+
+    return NextResponse.json({ success: false, error: errorMessage });
   }
 }
