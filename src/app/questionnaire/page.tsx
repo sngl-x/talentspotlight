@@ -1,12 +1,12 @@
 "use client";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const circleSizes = ["w-14 h-14", "w-12 h-12", "w-10 h-10", "w-10 h-10", "w-12 h-12", "w-14 h-14"];
 
-const QuestionnaireContent = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+const Questionnaire = () => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1); // -1 for start page
   const [responses, setResponses] = useState<Record<string, number | string[]>>({});
   const searchParams = useSearchParams();
   const invitationId = searchParams.get("invitation_id");
@@ -166,7 +166,7 @@ const QuestionnaireContent = () => {
       options: [
         "My organization has a higher purpose.",
         "My team has a clear, well-defined purpose aligned with the organization’s purpose.",
-        "In my organization, we aim to be effective, which is why we focus on what we do and do not spend much time discussing ‘the why.’",
+        "In my organization, we aim to be effective, which is why we focus on what we do and do not spend much time discussing \"the why.\"",
         "In my organization, people understand how they can contribute to its purpose.",
         "I’m unsure whether my organization has a stated purpose.",
       ],
@@ -185,6 +185,31 @@ const QuestionnaireContent = () => {
     },
   ];
 
+  const handleStart = async () => {
+    if (!invitationId) {
+      console.error("Missing invitation ID");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/responses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invitationId }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setCurrentQuestionIndex(0); // Start the questionnaire
+      } else {
+        console.error("Failed to initialize responses:", data.message || data.error);
+      }
+    } catch (error) {
+      console.error("Error initializing responses:", error);
+    }
+  };
+
   const handleNext = async () => {
     if (!invitationId) {
       console.error("Missing invitation ID");
@@ -197,9 +222,10 @@ const QuestionnaireContent = () => {
     try {
       if (isMultiQuestion) {
         const currentMultiQuestion = multichoiceQuestions[multiIndex];
-        const selectedOptions = Array.isArray(responses[currentMultiQuestion.id])
-          ? responses[currentMultiQuestion.id]
-          : [];
+        const selectedOptions =
+          Array.isArray(responses[currentMultiQuestion.id])
+            ? (responses[currentMultiQuestion.id] as string[])
+            : [];
 
         await fetch("/api/responses", {
           method: "POST",
@@ -241,7 +267,7 @@ const QuestionnaireContent = () => {
 
   const handleMultiChange = (questionId: string, option: string): void => {
     setResponses((prev) => {
-      const selected = Array.isArray(prev[questionId]) ? prev[questionId] : [];
+      const selected = Array.isArray(prev[questionId]) ? (prev[questionId] as string[]) : [];
       if (selected.includes(option)) {
         return { ...prev, [questionId]: selected.filter((o) => o !== option) };
       }
@@ -251,6 +277,21 @@ const QuestionnaireContent = () => {
       return prev;
     });
   };
+
+  if (currentQuestionIndex === -1) {
+    return (
+      <div className="p-8 font-sans text-center max-w-4xl mx-auto">
+        <h1 className="text-2xl font-bold mb-6">Welcome to the DPA Assessment Questionnaire</h1>
+        <p className="text-lg mb-8">Click &quot;Start&quot; to begin the questionnaire.</p>
+        <button
+          onClick={handleStart}
+          className="px-6 py-3 font-medium rounded bg-[#007A78] text-white hover:bg-[#005F5E]"
+        >
+          Start
+        </button>
+      </div>
+    );
+  }
 
   const isMultiQuestion = currentQuestionIndex >= questions.length;
   const multiIndex = currentQuestionIndex - questions.length;
@@ -270,7 +311,10 @@ const QuestionnaireContent = () => {
                 <input
                   type="checkbox"
                   className="w-6 h-6"
-                  checked={((responses[currentMultiQuestion.id] as string[]) || []).includes(option)}
+                  checked={
+                    Array.isArray(responses[currentMultiQuestion.id]) &&
+                    (responses[currentMultiQuestion.id] as string[]).includes(option)
+                  }
                   onChange={() => handleMultiChange(currentMultiQuestion.id, option)}
                 />
                 <span>{option}</span>
@@ -311,10 +355,10 @@ const QuestionnaireContent = () => {
   );
 };
 
-const Questionnaire = () => (
+const QuestionnaireWrapper = () => (
   <Suspense fallback={<div>Loading...</div>}>
-    <QuestionnaireContent />
+    <Questionnaire />
   </Suspense>
 );
 
-export default Questionnaire;
+export default QuestionnaireWrapper;
