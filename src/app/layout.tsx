@@ -1,8 +1,8 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Your App',
-  description: 'A simple app for your DPA questionnaire.',
+  title: 'DPA Assessment',
+  description: 'Collection of data for DPA.',
 };
 
 export default function RootLayout({
