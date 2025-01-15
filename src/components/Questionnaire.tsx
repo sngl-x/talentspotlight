@@ -1,0 +1,238 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
+// Define types for localizedText and staticText
+interface StaticText {
+  welcomeMessage?: string;
+  startButton?: string;
+  nextButton?: string;
+  submitButton?: string;
+  thankYouMessage?: string;
+  loadingMessage?: string;
+}
+
+// Circle sizes
+const circleSizes = ["w-14 h-14", "w-12 h-12", "w-10 h-10", "w-10 h-10", "w-12 h-12", "w-14 h-14"];
+
+// Questions array (IDs and aspects only)
+const questions = [
+  { id: 1, aspect: "Well-being" },
+  { id: 2, aspect: "Psychological Safety" },
+  { id: 3, aspect: "Coherent" },
+  { id: 4, aspect: "Collaboration" },
+  { id: 5, aspect: "Power Distribution" },
+  { id: 6, aspect: "Organizational Structure" },
+  { id: 7, aspect: "Leadership Distribution" },
+  { id: 8, aspect: "Self-leadership" },
+  { id: 9, aspect: "Transparency" },
+  { id: 10, aspect: "Feedback" },
+  { id: 11, aspect: "Degree of Decentralization and Involvement" },
+  { id: 12, aspect: "Balance/Focus" },
+  { id: 13, aspect: "Salary Equilibrium" },
+  { id: 14, aspect: "Profit-sharing" },
+  { id: 15, aspect: "Collaboration Tools" },
+  { id: 16, aspect: "Digital Information Sharing" },
+  { id: 17, aspect: "Talent Acquisition" },
+  { id: 18, aspect: "Competence Development" },
+  { id: 19, aspect: "Work Flexibility" },
+  { id: 20, aspect: "Measurement of Work" },
+  { id: 21, aspect: "Social Engagement" },
+  { id: 22, aspect: "Sustainability" },
+  { id: 23, aspect: "Ethical Business Aspects" },
+];
+
+const Questionnaire = () => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1); // -1 for start page
+  const [responses, setResponses] = useState<Record<string, number | string[]>>({});
+  const [language, setLanguage] = useState("en");
+  const [localizedText, setLocalizedText] = useState<Record<string, Record<string, string | string[]>>>({});
+  const [staticText, setStaticText] = useState<StaticText>({});
+  const searchParams = useSearchParams();
+  const invitationId = searchParams.get("invitation_id");
+
+  useEffect(() => {
+const loadLocalizedText = async (): Promise<void> => {
+  try {
+    const res = await fetch(`/locales/questions-${language}.json`);
+    const data: Record<string, Record<string, string | string[]>> = await res.json();
+    setLocalizedText(data);
+    setStaticText(data.staticText || {});
+  } catch (error) {
+    console.error("Error loading localized text:", error);
+  }
+};
+
+    loadLocalizedText();
+  }, [language]);
+
+const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  setLanguage(event.target.value);
+};
+
+
+
+
+  const handleStart = () => {
+    setCurrentQuestionIndex(0);
+  };
+
+  const handleNext = async () => {
+    try {
+      const isMultiChoice = currentQuestionIndex >= questions.length;
+      const multiIndex = currentQuestionIndex - questions.length;
+
+      if (isMultiChoice) {
+        const currentMultiQuestionId = `q${24 + multiIndex}`;
+        const selectedOptions = responses[currentMultiQuestionId] || [];
+        await fetch("/api/responses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            invitationId,
+            [currentMultiQuestionId]: selectedOptions,
+          }),
+        });
+      } else {
+        const currentQuestion = questions[currentQuestionIndex];
+        const responseValue = responses[currentQuestion.id];
+        await fetch("/api/responses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            invitationId,
+            questionId: currentQuestion.id,
+            responseValue,
+          }),
+        });
+      }
+
+      if (currentQuestionIndex < questions.length + 2 - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        alert(staticText.thankYouMessage || "Thank you for completing the survey!");
+      }
+    } catch (error) {
+      console.error("Error submitting response:", error);
+    }
+  };
+
+  const handleResponseChange = (questionId: number, value: number) => {
+    setResponses((prev) => ({ ...prev, [questionId]: value }));
+  };
+
+const handleMultiChoiceChange = (id: string, option: string) => {
+  setResponses((prev) => {
+    const selected = Array.isArray(prev[id]) ? (prev[id] as string[]) : [];
+    if (selected.includes(option)) {
+      return { ...prev, [id]: selected.filter((o) => o !== option) };
+    }
+    return { ...prev, [id]: [...selected, option] };
+  });
+};
+
+
+
+  if (currentQuestionIndex === -1) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          {staticText.welcomeMessage || "Welcome to the DPA Assessment Questionnaire"}
+        </h1>
+        <div className="relative mb-6">
+          <select
+            value={language}
+            onChange={handleLanguageChange}
+            className="appearance-none px-4 py-3 w-full max-w-xs text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none hover:border-gray-400 focus:ring-2 focus:ring-gray-300 cursor-pointer"
+          >
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="sv">Svenska</option>
+          </select>
+        </div>
+        <button
+          onClick={handleStart}
+          className="px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
+        >
+          {staticText.startButton || "Start"}
+        </button>
+      </div>
+    );
+  }
+
+  if (currentQuestionIndex >= questions.length) {
+    const multiIndex = currentQuestionIndex - questions.length;
+    const currentMultiQuestionId = `q${24 + multiIndex}`;
+    const currentMultiQuestion = localizedText[currentMultiQuestionId];
+if (!currentMultiQuestion || typeof currentMultiQuestion !== "object") {
+  console.error("Invalid multi-question format");
+  return null;
+}
+
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 text-center">{currentMultiQuestion.title}</h1>
+        <p className="text-lg text-gray-700 mb-6 text-center">{currentMultiQuestion.description}</p>
+        <div className="flex flex-col items-center space-y-4">
+          {Array.isArray(currentMultiQuestion.options) &&
+  currentMultiQuestion.options.map((option: string, index: number) => (
+            <label key={index} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                value={option}
+                checked={
+                  Array.isArray(responses[currentMultiQuestionId]) &&
+                  (responses[currentMultiQuestionId] as string[]).includes(option)
+                }
+                onChange={() => handleMultiChoiceChange(currentMultiQuestionId, option)}
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+        </div>
+        <button
+          onClick={handleNext}
+          className="mt-6 px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
+        >
+          {currentQuestionIndex < questions.length + 2 - 1
+            ? staticText.nextButton || "Next"
+            : staticText.submitButton || "Submit"}
+        </button>
+      </div>
+    );
+  }
+
+  const currentQuestion = localizedText[currentQuestionIndex + 1] || {};
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+      <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">DPA Assessment Questionnaire</h1>
+      <div className="flex items-center justify-between w-full max-w-4xl p-6 bg-white rounded-lg shadow-md">
+        <span className="text-lg font-medium text-gray-700 w-1/3 text-right pr-4">{currentQuestion.statement}</span>
+        <div className="flex justify-center space-x-4 w-1/3">
+          {circleSizes.map((size, i) => (
+            <button
+              key={i}
+              className={`rounded-full ${size} ${
+                responses[questions[currentQuestionIndex].id] === i + 1
+                  ? "bg-[#007A78] text-white"
+                  : "bg-gray-200"
+              }`}
+              onClick={() => handleResponseChange(questions[currentQuestionIndex].id, i + 1)}
+            />
+          ))}
+        </div>
+        <span className="text-lg font-medium text-gray-700 w-1/3 text-left pl-4">{currentQuestion.reverseStatement}</span>
+      </div>
+      <button
+        onClick={handleNext}
+        className="mt-6 px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
+      >
+        {currentQuestionIndex < questions.length - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
+      </button>
+    </div>
+  );
+};
+
+export default Questionnaire;
