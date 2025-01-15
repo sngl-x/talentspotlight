@@ -1,13 +1,9 @@
-import { ClerkProvider } from '@clerk/nextjs';
-import type { AppProps } from 'next/app';
+import "./globals.css"; // Import your global styles
+import type { AppProps } from "next/app";
 
-// Import your global styles
-import '../app/globals.css'; // Adjust path if necessary
-
-export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <ClerkProvider {...pageProps}>
-      <Component {...pageProps} />
-    </ClerkProvider>
-  );
+// Main App component
+function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
 }
+
+export default MyApp;

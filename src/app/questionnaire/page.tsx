@@ -1,20 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-const circleSizes = [
-  "w-14 h-14",
-  "w-12 h-12",
-  "w-10 h-10",
-  "w-10 h-10",
-  "w-12 h-12",
-  "w-14 h-14",
-];
+const circleSizes = ["w-14 h-14", "w-12 h-12", "w-10 h-10", "w-10 h-10", "w-12 h-12", "w-14 h-14"];
 
-const Questionnaire = () => {
+const QuestionnaireContent = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [responses, setResponses] = useState({});
+  const [responses, setResponses] = useState<Record<string, number | string[]>>({});
   const searchParams = useSearchParams();
   const invitationId = searchParams.get("invitation_id");
 
@@ -204,7 +197,9 @@ const Questionnaire = () => {
     try {
       if (isMultiQuestion) {
         const currentMultiQuestion = multichoiceQuestions[multiIndex];
-        const selectedOptions = responses[currentMultiQuestion.id] || [];
+        const selectedOptions = Array.isArray(responses[currentMultiQuestion.id])
+          ? responses[currentMultiQuestion.id]
+          : [];
 
         await fetch("/api/responses", {
           method: "POST",
@@ -233,19 +228,20 @@ const Questionnaire = () => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
         console.log("All responses submitted.");
+        alert("Thank you for completing the survey!");
       }
     } catch (error) {
       console.error("Error submitting response:", error);
     }
   };
 
-  const handleChange = (questionId, value) => {
+  const handleChange = (questionId: number, value: number): void => {
     setResponses((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const handleMultiChange = (questionId, option) => {
+  const handleMultiChange = (questionId: string, option: string): void => {
     setResponses((prev) => {
-      const selected = prev[questionId] || [];
+      const selected = Array.isArray(prev[questionId]) ? prev[questionId] : [];
       if (selected.includes(option)) {
         return { ...prev, [questionId]: selected.filter((o) => o !== option) };
       }
@@ -274,7 +270,7 @@ const Questionnaire = () => {
                 <input
                   type="checkbox"
                   className="w-6 h-6"
-                  checked={(responses[currentMultiQuestion.id] || []).includes(option)}
+                  checked={((responses[currentMultiQuestion.id] as string[]) || []).includes(option)}
                   onChange={() => handleMultiChange(currentMultiQuestion.id, option)}
                 />
                 <span>{option}</span>
@@ -284,9 +280,7 @@ const Questionnaire = () => {
         </>
       ) : (
         <>
-          <p className="mb-6 text-center max-w-3xl mx-auto">
-            In my organization...
-          </p>
+          <p className="mb-6 text-center max-w-3xl mx-auto">In my organization...</p>
           <div className="flex items-center justify-between space-x-8 mb-12">
             <span className="text-sm w-1/3 text-right">{currentQuestion.statement}</span>
             <div className="flex justify-center space-x-6 w-1/3 items-center">
@@ -316,5 +310,11 @@ const Questionnaire = () => {
     </div>
   );
 };
+
+const Questionnaire = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <QuestionnaireContent />
+  </Suspense>
+);
 
 export default Questionnaire;

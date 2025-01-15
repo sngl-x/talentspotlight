@@ -57,10 +57,16 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error updating responses:", error.message);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+   } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error updating responses:", error.message);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    } else {
+      console.error("Unexpected error:", error);
+      return NextResponse.json({ success: false, error: "An unexpected error occurred" }, { status: 500 });
+    }
   } finally {
     client.release();
   }
+
 }

@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
+import { Pool } from "pg";
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
 
 export async function POST(req: Request) {
+  const client = await pool.connect();
+
   try {
     const { invitationId, questionId, responseValue, q24 = [], q25 = [] } = await req.json();
 
@@ -11,33 +19,66 @@ export async function POST(req: Request) {
       );
     }
 
-    if (questionId && typeof responseValue !== "undefined") {
-      console.log(
-        `Saving single-choice response: Invitation ID=${invitationId}, Question ID=${questionId}, Value=${responseValue}`
+    if (questionId && typeof responseValue === "undefined") {
+      return NextResponse.json(
+        { success: false, message: "Missing question ID or response value" },
+        { status: 400 }
       );
-      return NextResponse.json({ success: true });
+    }
+
+    if (!questionId && !responseValue && !q24.length && !q25.length) {
+      return NextResponse.json(
+        { success: false, message: "Invalid request format" },
+        { status: 400 }
+      );
+    }
+
+    if (questionId && responseValue !== undefined) {
+      const query = `
+        UPDATE responses
+        SET q${questionId} = $1
+        WHERE invitation_id = $2
+      `;
+
+      await client.query(query, [responseValue, invitationId]);
     }
 
     if (q24.length > 0) {
-      console.log(
-        `Saving multi-choice response for q24: Invitation ID=${invitationId}, Selected Options=${q24}`
-      );
-      return NextResponse.json({ success: true });
+      const query = `
+        UPDATE responses
+        SET q24 = $1
+        WHERE invitation_id = $2
+      `;
+
+      await client.query(query, [JSON.stringify(q24), invitationId]);
     }
 
     if (q25.length > 0) {
-      console.log(
-        `Saving multi-choice response for q25: Invitation ID=${invitationId}, Selected Options=${q25}`
-      );
-      return NextResponse.json({ success: true });
+      const query = `
+        UPDATE responses
+        SET q25 = $1
+        WHERE invitation_id = $2
+      `;
+
+      await client.query(query, [JSON.stringify(q25), invitationId]);
     }
 
-    return NextResponse.json(
-      { success: false, message: "No valid response data provided" },
-      { status: 400 }
-    );
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error in submit endpoint:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      console.error("Error in submit endpoint:", error.message);
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 500 }
+      );
+    } else {
+      console.error("Unexpected error:", error);
+      return NextResponse.json(
+        { success: false, error: "An unexpected error occurred" },
+        { status: 500 }
+      );
+    }
+  } finally {
+    client.release();
   }
 }
