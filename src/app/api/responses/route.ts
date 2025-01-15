@@ -3,31 +3,73 @@ import { Pool } from "pg";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // Required for Neon
+  ssl: { rejectUnauthorized: false },
 });
 
 export async function POST(req: Request) {
+  const client = await pool.connect();
+
   try {
-    const { userId, responses } = await req.json();
+    // Parse the raw request body
+    const rawBody = await req.text();
+    console.log("Raw Request Body:", rawBody);
 
-    const client = await pool.connect();
+    const { invitationId, questionId, responseValue, q24, q25 } = JSON.parse(rawBody);
 
-    const query = `
-      INSERT INTO responses (user_id, question_id, response_value, submitted_at)
-      VALUES ($1, $2, $3, NOW())
-    `;
+    // Validate required fields
+    if (!invitationId) {
+      console.error("Missing invitationId in request payload");
+      return NextResponse.json(
+        { success: false, message: "Missing invitationId in request payload" },
+        { status: 400 }
+      );
+    }
 
-    const promises = responses.map(({ questionId, response_value }: { questionId: string; response_value: number }) =>
-      client.query(query, [userId, questionId, response_value])
-    );
+    if (!questionId && !responseValue && !q24 && !q25) {
+      console.error("Missing response data in request payload");
+      return NextResponse.json(
+        { success: false, message: "Missing response data in request payload" },
+        { status: 400 }
+      );
+    }
 
-    await Promise.all(promises);
+    let query, values;
 
-    client.release();
+    if (questionId && responseValue !== undefined) {
+      // Single-choice question (q1 to q23)
+      query = `
+        UPDATE responses
+        SET q${questionId} = $1
+        WHERE invitation_id = $2
+      `;
+      values = [responseValue, invitationId];
+    } else if (q24 || q25) {
+      // Multi-choice questions (q24 or q25)
+      const column = q24 ? "q24" : "q25";
+      const responseData = q24 ? JSON.stringify(q24) : JSON.stringify(q25);
 
+      query = `
+        UPDATE responses
+        SET ${column} = $1
+        WHERE invitation_id = $2
+      `;
+      values = [responseData, invitationId];
+    } else {
+      return NextResponse.json(
+        { success: false, message: "Invalid request structure" },
+        { status: 400 }
+      );
+    }
+
+    // Execute the query
+    await client.query(query, values);
+
+    console.log(`Response saved: ${JSON.stringify({ query, values })}`);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error saving responses:", error.message);
+    console.error("Error saving response:", error.message);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } finally {
+    client.release();
   }
 }
