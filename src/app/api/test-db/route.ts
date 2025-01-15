@@ -1,25 +1,28 @@
-import { NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { currentUser } from "@clerk/nextjs";
+import { Pool } from "pg";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // Required for Neon
+  ssl: { rejectUnauthorized: false },
 });
 
-export async function GET() {
+export async function POST() {
+  const user = await currentUser();
+
+  if (!user) {
+    return NextResponse.json({ success: false, message: "User not authenticated" });
+  }
+
   try {
     const client = await pool.connect();
-    const res = await client.query('SELECT NOW()');
+    await client.query(
+      "INSERT INTO users (clerk_user_id, email, created_at) VALUES ($1, $2, NOW()) ON CONFLICT (clerk_user_id) DO NOTHING",
+      [user.id, user.emailAddresses[0]?.emailAddress]
+    );
     client.release();
-    return NextResponse.json({ success: true, timestamp: res.rows[0].now });
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Database connection error:', error);
-
-    // Refined catch block
-    const errorMessage = error instanceof Error
-      ? error.message
-      : 'An unknown error occurred';
-
-    return NextResponse.json({ success: false, error: errorMessage });
+    console.error("Database error:", error);
+    return NextResponse.json({ success: false, error: error.message });
   }
 }
