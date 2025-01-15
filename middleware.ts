@@ -1,23 +1,12 @@
-import { withClerkMiddleware } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { authMiddleware } from "@clerk/nextjs";
 
-export default withClerkMiddleware((req) => {
-  const publicPaths = ["/", "/login(.*)", "/sign-up(.*)"];
-
-  const isPublicPath = publicPaths.some((path) =>
-    new RegExp(`^${path}$`).test(req.nextUrl.pathname)
-  );
-
-  if (isPublicPath) {
-    return NextResponse.next();
-  }
-
-  // Redirect to login if not authenticated
-  const url = new URL(req.url);
-  url.pathname = "/login";
-  return NextResponse.redirect(url);
+export default authMiddleware({
+  publicRoutes: ["/login", "/sign-up", "/api/*"],
 });
 
 export const config = {
-  matcher: "/((?!_next|.*\\..*).*)",
+  matcher: [
+    "/((?!.*\\..*|_next).*)", // Matches all routes except those containing a period (.) or "_next".
+    "/",
+  ],
 };
