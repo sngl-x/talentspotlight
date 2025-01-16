@@ -13,6 +13,7 @@ interface StaticText {
   loadingMessage?: string;
   completionMessage?: string;
   prefixStatement?: string;
+  progressText?: string;
 }
 
 // Circle sizes
@@ -44,6 +45,8 @@ const questions = [
   { id: 22, aspect: "Sustainability" },
   { id: 23, aspect: "Ethical Business Aspects" },
 ];
+
+const totalQuestions = questions.length + 2; // Include multi-choice questions (q24, q25)
 
 const Questionnaire: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
@@ -120,7 +123,7 @@ const Questionnaire: React.FC = () => {
         });
       }
 
-      if (currentQuestionIndex < questions.length + 2 - 1) {
+      if (currentQuestionIndex < totalQuestions - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
         setIsComplete(true);
@@ -129,6 +132,8 @@ const Questionnaire: React.FC = () => {
       console.error("Error submitting response:", error);
     }
   };
+
+  const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
 
   if (isComplete) {
     return (
@@ -217,7 +222,7 @@ const Questionnaire: React.FC = () => {
               (responses[currentMultiQuestionId] as string[]).length === 0)
           }
         >
-          {currentQuestionIndex < questions.length + 2 - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
+          {currentQuestionIndex < totalQuestions - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
         </button>
       </div>
     );
@@ -228,23 +233,39 @@ const Questionnaire: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
       <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">DPA Assessment Questionnaire</h1>
+
+      {/* Progress Bar */}
+      <div className="w-full max-w-4xl mb-6">
+        <div className="h-4 bg-gray-300 rounded-full">
+          <div
+            className="h-4 bg-[#007A78] rounded-full transition-all duration-200"
+            style={{ width: `${progressPercentage}%` }}
+          ></div>
+        </div>
+        <p className="text-sm text-gray-600 mt-2 text-right">
+          {staticText.progressText || "Progress:"} {progressPercentage}%
+        </p>
+      </div>
+
+      {/* Question Content */}
       <div className="flex items-center justify-between w-full max-w-4xl p-6 bg-white rounded-lg shadow-md">
         <span className="text-lg font-medium text-gray-700 w-1/3 text-right pr-4">{currentQuestion.statement}</span>
         <div className="flex justify-center space-x-4 w-1/3">
           {circleSizes.map((size, i) => (
             <button
-              key={i}
+              key={              i}
               className={`rounded-full ${size} ${
-                responses[questions[currentQuestionIndex].id] === i + 1
+                responses[questions[currentQuestionIndex]?.id] === i + 1
                   ? "bg-[#007A78] text-white"
                   : "bg-gray-200"
               }`}
-              onClick={() => handleResponseChange(questions[currentQuestionIndex].id, i + 1)}
+              onClick={() => handleResponseChange(questions[currentQuestionIndex]?.id, i + 1)}
             />
           ))}
         </div>
         <span className="text-lg font-medium text-gray-700 w-1/3 text-left pl-4">{currentQuestion.reverseStatement}</span>
       </div>
+
       <button
         onClick={handleNext}
         className={`mt-6 px-6 py-3 font-medium rounded-lg transition-all duration-150 ${
@@ -254,10 +275,13 @@ const Questionnaire: React.FC = () => {
         }`}
         disabled={!responses[questions[currentQuestionIndex]?.id]}
       >
-        {currentQuestionIndex < questions.length - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
+        {currentQuestionIndex < totalQuestions - 1
+          ? staticText.nextButton || "Next"
+          : staticText.submitButton || "Submit"}
       </button>
     </div>
   );
 };
 
 export default Questionnaire;
+

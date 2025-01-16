@@ -5,7 +5,9 @@
     "nextButton": "Next",
     "submitButton": "Submit",
     "thankYouMessage": "Thank you for completing the survey!",
-    "loadingMessage": "Loading questions, please wait..."
+    "loadingMessage": "Loading questions, please wait...",
+    "prefixStatement": "I min organisation..."
+  },
   },
 
   "1": {
