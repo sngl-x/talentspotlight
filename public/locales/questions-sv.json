@@ -1,0 +1,126 @@
+{
+  "staticText": {
+    "welcomeMessage": "Välkommen till DPA Bedömningsformulär",
+    "startButton": "Starta",
+    "nextButton": "Nästa",
+    "submitButton": "Skicka",
+    "thankYouMessage": "Tack för att du genomfört undersökningen!",
+    "loadingMessage": "Laddar frågor, vänligen vänta..."
+        "prefixStatement": "I min organisation..."
+  },
+
+  "1": {
+    "statement": "strävar vi aktivt efter att skapa en arbetsmiljö utan arbetsrelaterad sjukfrånvaro, utan negativ stress och där människor känner att de kan växa och utvecklas som individer.",
+    "reverseStatement": "ligger fokus på produktivitet, att hålla deadlines och att effektivt driva verksamheten."
+  },
+  "2": {
+    "statement": "känner vi oss trygga och uppskattade, alla inkluderas, det finns utrymme för lärande och vi har alla möjlighet att bidra och utmana.",
+    "reverseStatement": "bidrar människor utifrån sina roller och positioner."
+  },
+  "3": {
+    "statement": "är värderingar och övertygelser i linje med syfte, mål och strategier, och det är naturligt för människor att konsekvent agera i enlighet med dessa värderingar och övertygelser i de flesta situationer.",
+    "reverseStatement": "har värderingar formulerats av ledning och/eller HR och inkluderas i våra presentationer och dokument."
+  },
+  "4": {
+    "statement": "finns det inga begränsningar för samarbete när det gäller att dela nya idéer, hantera problem eller ta itu med utmaningar.",
+    "reverseStatement": "är samarbetet tydligt definierat och följer organisationsstrukturen och rollerna."
+  },
+  "5": {
+    "statement": "har alla grupper frihet att fatta beslut inom sina områden och känner en stark känsla av ägarskap över sina mål och uppgifter.",
+    "reverseStatement": "är det naturligt att vissa grupper, positioner eller roller har mer beslutsfattande befogenheter än andra, oavsett vem som utför uppgifterna."
+  },
+  "6": {
+    "statement": "bildas team vid behov, och individer kan tillhöra flera team. Planering, uppföljningar och kommunikation samordnas mellan team.",
+    "reverseStatement": "är alla team och enheter tydligt definierade, med varje person som tillhör ett team och en tydlig rapporteringsstruktur på plats."
+  },
+  "7": {
+    "statement": "kan vem som helst ta ledningen beroende på situationen och uppgiften som ska utföras.",
+    "reverseStatement": "är det väl förstått att formella chefer är ledarna, som fattar nyckelbeslut och påverkar gruppens resultat."
+  },
+  "8": {
+    "statement": "ansvarar individer för sin egen utveckling, hantering av sitt beteende och sina känslor för att nå både personliga och professionella mål.",
+    "reverseStatement": "ansvarar chefer för att övervaka människors beteende och utveckling, och de ger stöd när konflikter uppstår."
+  },
+  "9": {
+    "statement": "upprätthåller vi transparens i nästan allt, både internt och externt.",
+    "reverseStatement": "finns det tydliga processer för att dela planer, information och utmaningar, tillsammans med klarhet kring vilken typ av information som ska delas och med vem."
+  },
+  "10": {
+    "statement": "finns det inga formella rutiner för uppföljning av resultat och beteenden. Istället förlitar vi oss på spontana samtal mellan kollegor för lärande och problemlösning.",
+    "reverseStatement": "strävar vi efter kontinuerlig förbättring, och chefer genomför utvärderingar och uppföljningar av både individer och team."
+  },
+  "11": {
+    "statement": "är beslutsfattande fördelat mellan flera personer och det är inte enbart chefers ansvar.",
+    "reverseStatement": "ansvarar chefer och specialister för att fatta beslut, och de samlar ibland in synpunkter från andra."
+  },
+  "12": {
+    "statement": "har vi väldefinierade forum för att fatta operativa, taktiska och strategiska beslut.",
+    "reverseStatement": "fokuserar vi på att fatta beslut om akuta frågor och omedelbara problem, med öppna forum tillgängliga för att diskutera framväxande frågor."
+  },
+  "13": {
+    "statement": "baseras löner på kompetens, arbetsuppgifter och värde för organisationen, med avsikt att hålla skillnaden mellan de lägsta och högsta lönerna inom en fyrfaldig nivå.",
+    "reverseStatement": "bestäms lönen av positionen, med den specifika lönenivån fastställd individuellt."
+  },
+  "14": {
+    "statement": "finns det en tydlig avsikt att dela 20-30 procent av vinsten mellan alla i organisationen.",
+    "reverseStatement": "delas vinster genom bonusar för vissa positioner och utdelningar till aktieägare, med nivåerna fastställda av styrelsen och ledningsteamet."
+  },
+  "15": {
+    "statement": "används digitala samarbetsverktyg av alla för både arbetsuppgifter och socialisering.",
+    "reverseStatement": "används digitala samarbetsverktyg när uppgiften eller processen kräver det."
+  },
+  "16": {
+    "statement": "underlättar digitala verktyg och teknologi informationsutbyte till alla i ett förståeligt format, nästan i realtid.",
+    "reverseStatement": "säkerställs informationsdelning genom digitala verktyg med tydliga åtkomsträttigheter."
+  },
+  "17": {
+    "statement": "rekryterar vi människor baserat på kulturell passform och överensstämmelse med organisationen, snarare än för en specifik roll.",
+    "reverseStatement": "säkerställer vi att vi har nödvändig kompetens genom att rekrytera individer med relevant kunskap och erfarenhet."
+  },
+  "18": {
+    "statement": "ansvarar individer för sin egen kompetensutveckling, och organisationen erbjuder olika inlärningssätt, såsom tester, övningar och simuleringar.",
+    "reverseStatement": "säkerställer vi kompetensutveckling genom att tilldela en fast budget för kurser och utbildning."
+  },
+  "19": {
+    "statement": "har vi full frihet att arbeta var och när vi vill, så länge vi tar hänsyn till beroenden av andra och uppfyller leveranstider.",
+    "reverseStatement": "är det tydligt att vi följer ett förutbestämt arbetsschema och utför alla uppgifter på arbetsplatsen."
+  },
+  "20": {
+    "statement": "fokuserar vi på att mäta leveranser, och vi använder inte standardiserade tidsuppskattningar för uppgifter.",
+    "reverseStatement": "använder vi standardiserade tidsenheter för att mäta och följa upp våra uppgifter."
+  },
+  "21": {
+    "statement": "finns det en dedikerad budget och möjligheter att delta i sociala engagemang under arbetstid.",
+    "reverseStatement": "betraktas socialt engagemang som en personlig fråga och inte en del av arbetet, även om vissa medel är avsatta till ideella organisationer."
+  },
+  "22": {
+    "statement": "beaktas hållbarhet i alla aspekter, inklusive produktlivscykel, leverantörsval, transporter, medarbetaraktiviteter och arbetsmetoder.",
+    "reverseStatement": "är vi mycket kostnadsmedvetna vid valet av leverantörer, planering av resor, hantering av logistik och fastställande av arbetsmetoder."
+  },
+  "23": {
+    "statement": "styr våra etiska principer alla finansiella beslut.",
+    "reverseStatement": "drivs finansiella beslut av att säkerställa efterlevnad, samt att beakta allmänhetens uppfattningar och trender."
+  },
+  "q24": {
+    "title": "Syfte",
+    "description": "Syfte definierar organisationens övergripande uppdrag och högre mål...",
+    "options": [
+      "Min organisation har ett högre syfte.",
+      "Mitt team har ett tydligt, väldefinierat syfte i linje med organisationens syfte.",
+      "strävar vi efter att vara effektiva, vilket är varför vi fokuserar på vad vi gör och inte lägger mycket tid på att diskutera 'varför'.",
+      "förstår människor hur de kan bidra till syftet.",
+      "Jag är osäker på om min organisation har ett uttalat syfte."
+    ]
+  },
+  "q25": {
+    "title": "Principer",
+    "description": "Principer är de kärnvärden och riktlinjer som formar beslutsfattande och beteende...",
+    "options": [
+      "lever de flesta våra värderingar.",
+      "stödjer principer oss i beslutsfattande.",
+      "används värderingar främst för marknadsföringssyften.",
+      "kommuniceras och upprätthålls principer och/eller värderingar konsekvent.",
+      "Jag är osäker på om min organisation har uttalade principer och/eller värderingar."
+    ]
+  }
+}

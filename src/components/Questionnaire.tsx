@@ -11,6 +11,8 @@ interface StaticText {
   submitButton?: string;
   thankYouMessage?: string;
   loadingMessage?: string;
+  completionMessage?: string;
+  prefixStatement?: string;
 }
 
 // Circle sizes
@@ -43,39 +45,49 @@ const questions = [
   { id: 23, aspect: "Ethical Business Aspects" },
 ];
 
-const Questionnaire = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1); // -1 for start page
+const Questionnaire: React.FC = () => {
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
   const [responses, setResponses] = useState<Record<string, number | string[]>>({});
   const [language, setLanguage] = useState("en");
   const [localizedText, setLocalizedText] = useState<Record<string, Record<string, string | string[]>>>({});
   const [staticText, setStaticText] = useState<StaticText>({});
+  const [isComplete, setIsComplete] = useState(false);
   const searchParams = useSearchParams();
   const invitationId = searchParams.get("invitation_id");
 
   useEffect(() => {
-const loadLocalizedText = async (): Promise<void> => {
-  try {
-    const res = await fetch(`/locales/questions-${language}.json`);
-    const data: Record<string, Record<string, string | string[]>> = await res.json();
-    setLocalizedText(data);
-    setStaticText(data.staticText || {});
-  } catch (error) {
-    console.error("Error loading localized text:", error);
-  }
-};
-
+    const loadLocalizedText = async (): Promise<void> => {
+      try {
+        const res = await fetch(`/locales/questions-${language}.json`);
+        const data: Record<string, Record<string, string | string[]>> = await res.json();
+        setLocalizedText(data);
+        setStaticText(data.staticText || {});
+      } catch (error) {
+        console.error("Error loading localized text:", error);
+      }
+    };
     loadLocalizedText();
   }, [language]);
 
-const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  setLanguage(event.target.value);
-};
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setLanguage(event.target.value);
+  };
 
+  const handleMultiChoiceChange = (id: string, option: string) => {
+    setResponses((prev) => {
+      const selected = Array.isArray(prev[id]) ? (prev[id] as string[]) : [];
+      if (selected.includes(option)) {
+        return { ...prev, [id]: selected.filter((o) => o !== option) };
+      }
+      if (selected.length < 3) {
+        return { ...prev, [id]: [...selected, option] };
+      }
+      return prev; // Prevent adding more than 3 options
+    });
+  };
 
-
-
-  const handleStart = () => {
-    setCurrentQuestionIndex(0);
+  const handleResponseChange = (questionId: number, value: number) => {
+    setResponses((prev) => ({ ...prev, [questionId]: value }));
   };
 
   const handleNext = async () => {
@@ -111,28 +123,22 @@ const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
       if (currentQuestionIndex < questions.length + 2 - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
-        alert(staticText.thankYouMessage || "Thank you for completing the survey!");
+        setIsComplete(true);
       }
     } catch (error) {
       console.error("Error submitting response:", error);
     }
   };
 
-  const handleResponseChange = (questionId: number, value: number) => {
-    setResponses((prev) => ({ ...prev, [questionId]: value }));
-  };
-
-const handleMultiChoiceChange = (id: string, option: string) => {
-  setResponses((prev) => {
-    const selected = Array.isArray(prev[id]) ? (prev[id] as string[]) : [];
-    if (selected.includes(option)) {
-      return { ...prev, [id]: selected.filter((o) => o !== option) };
-    }
-    return { ...prev, [id]: [...selected, option] };
-  });
-};
-
-
+  if (isComplete) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+        <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+          {staticText.completionMessage || "Thank you for participating!"}
+        </h1>
+      </div>
+    );
+  }
 
   if (currentQuestionIndex === -1) {
     return (
@@ -152,7 +158,7 @@ const handleMultiChoiceChange = (id: string, option: string) => {
           </select>
         </div>
         <button
-          onClick={handleStart}
+          onClick={() => setCurrentQuestionIndex(0)}
           className="px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
         >
           {staticText.startButton || "Start"}
@@ -165,10 +171,11 @@ const handleMultiChoiceChange = (id: string, option: string) => {
     const multiIndex = currentQuestionIndex - questions.length;
     const currentMultiQuestionId = `q${24 + multiIndex}`;
     const currentMultiQuestion = localizedText[currentMultiQuestionId];
-if (!currentMultiQuestion || typeof currentMultiQuestion !== "object") {
-  console.error("Invalid multi-question format");
-  return null;
-}
+
+    if (!currentMultiQuestion || typeof currentMultiQuestion !== "object") {
+      console.error("Invalid multi-question format");
+      return null;
+    }
 
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
@@ -176,28 +183,41 @@ if (!currentMultiQuestion || typeof currentMultiQuestion !== "object") {
         <p className="text-lg text-gray-700 mb-6 text-center">{currentMultiQuestion.description}</p>
         <div className="flex flex-col items-center space-y-4">
           {Array.isArray(currentMultiQuestion.options) &&
-  currentMultiQuestion.options.map((option: string, index: number) => (
-            <label key={index} className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                value={option}
-                checked={
-                  Array.isArray(responses[currentMultiQuestionId]) &&
-                  (responses[currentMultiQuestionId] as string[]).includes(option)
-                }
-                onChange={() => handleMultiChoiceChange(currentMultiQuestionId, option)}
-              />
-              <span>{option}</span>
-            </label>
-          ))}
+            currentMultiQuestion.options.map((option: string, index: number) => (
+              <label
+                key={index}
+                className="appearance-none px-4 py-2 w-full max-w-xs text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none hover:border-gray-400 focus:ring-2 focus:ring-gray-300 cursor-pointer flex items-center space-x-2"
+              >
+                <input
+                  type="checkbox"
+                  value={option}
+                  checked={
+                    Array.isArray(responses[currentMultiQuestionId]) &&
+                    (responses[currentMultiQuestionId] as string[]).includes(option)
+                  }
+                  onChange={() => handleMultiChoiceChange(currentMultiQuestionId, option)}
+                  className="mr-2"
+                />
+                <span>{option}</span>
+              </label>
+            ))}
         </div>
         <button
           onClick={handleNext}
-          className="mt-6 px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
+          className={`mt-6 px-6 py-3 font-medium rounded-lg transition-all duration-150 ${
+            !responses[currentMultiQuestionId] ||
+            (Array.isArray(responses[currentMultiQuestionId]) &&
+              (responses[currentMultiQuestionId] as string[]).length === 0)
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-[#007A78] text-white hover:bg-[#005F5E]"
+          }`}
+          disabled={
+            !responses[currentMultiQuestionId] ||
+            (Array.isArray(responses[currentMultiQuestionId]) &&
+              (responses[currentMultiQuestionId] as string[]).length === 0)
+          }
         >
-          {currentQuestionIndex < questions.length + 2 - 1
-            ? staticText.nextButton || "Next"
-            : staticText.submitButton || "Submit"}
+          {currentQuestionIndex < questions.length + 2 - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
         </button>
       </div>
     );
@@ -227,7 +247,12 @@ if (!currentMultiQuestion || typeof currentMultiQuestion !== "object") {
       </div>
       <button
         onClick={handleNext}
-        className="mt-6 px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
+        className={`mt-6 px-6 py-3 font-medium rounded-lg transition-all duration-150 ${
+          !responses[questions[currentQuestionIndex]?.id]
+            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+            : "bg-[#007A78] text-white hover:bg-[#005F5E]"
+        }`}
+        disabled={!responses[questions[currentQuestionIndex]?.id]}
       >
         {currentQuestionIndex < questions.length - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
       </button>
