@@ -3,11 +3,18 @@
 import React, { useState, useEffect } from "react";
 import AdminMenu from "@/components/AdminMenu";
 
-// Define the structure of an Invitation
 interface Invitation {
   recipient: string;
   email: string;
   date_sent: string;
+  organization_name: string;
+  organization_location?: string;
+  organization_size?: string;
+  organization_industry?: string;
+  organization_type?: string;
+  contact_name?: string;
+  contact_email?: string;
+  contact_phone?: string;
 }
 
 const InvitationsPage: React.FC = () => {
@@ -64,6 +71,8 @@ const InvitationsPage: React.FC = () => {
                   <th className="px-6 py-3">Recipient</th>
                   <th className="px-6 py-3">Email</th>
                   <th className="px-6 py-3">Date Sent</th>
+                  <th className="px-6 py-3">Organization</th>
+                  <th className="px-6 py-3">Contact Person</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,14 +81,24 @@ const InvitationsPage: React.FC = () => {
                     <tr key={index} className="border-t">
                       <td className="px-6 py-4">{invite.recipient}</td>
                       <td className="px-6 py-4">{invite.email}</td>
+                      <td className="px-6 py-4">{new Date(invite.date_sent).toLocaleDateString()}</td>
                       <td className="px-6 py-4">
-                        {new Date(invite.date_sent).toLocaleDateString()}
+                        {invite.organization_name} ({invite.organization_type})
+                        <br />
+                        {invite.organization_industry}, {invite.organization_size}
+                        <br />
+                        {invite.organization_location}
+                      </td>
+                      <td className="px-6 py-4">
+                        {invite.contact_name} ({invite.contact_email})
+                        <br />
+                        {invite.contact_phone}
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={3} className="px-6 py-4 text-center">
+                    <td colSpan={5} className="px-6 py-4 text-center">
                       No invitations sent yet.
                     </td>
                   </tr>

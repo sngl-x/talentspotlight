@@ -20,24 +20,23 @@ const CsvUploader: React.FC = () => {
     }
   };
 
-const parseCsv = (file: File) => {
-  Papa.parse<Record<string, string | number>>(file, {
-    header: true,
-    skipEmptyLines: true,
-    complete: (results) => {
-      if (results.meta.fields) {
-        setHeaders(results.meta.fields);
-        setPreviewData(results.data as Record<string, string | number>[]); // Cast the type explicitly
-      } else {
-        setError("Could not read CSV headers. Please check the file.");
-      }
-    },
-    error: (error) => {
-      setError(`Error parsing CSV: ${error.message}`);
-    },
-  });
-};
-
+  const parseCsv = (file: File) => {
+    Papa.parse<Record<string, string | number>>(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        if (results.meta.fields) {
+          setHeaders(results.meta.fields);
+          setPreviewData(results.data as Record<string, string | number>[]);
+        } else {
+          setError("Could not read CSV headers. Please check the file.");
+        }
+      },
+      error: (error) => {
+        setError(`Error parsing CSV: ${error.message}`);
+      },
+    });
+  };
 
   const handleSendInvites = () => {
     if (!nameColumn || !emailColumn) {
@@ -60,7 +59,7 @@ const parseCsv = (file: File) => {
         type="file"
         accept=".csv"
         onChange={handleFileUpload}
-        className="mb-4 p-2 border border-gray-300 rounded-md"
+        className="mb-4 p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#007A78] hover:border-gray-400"
       />
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -72,7 +71,7 @@ const parseCsv = (file: File) => {
             <select
               value={nameColumn || ""}
               onChange={(e) => setNameColumn(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md w-full"
+              className="p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#007A78] hover:border-gray-400 w-full"
             >
               <option value="">Select Column</option>
               {headers.map((header) => (
@@ -88,7 +87,7 @@ const parseCsv = (file: File) => {
             <select
               value={emailColumn || ""}
               onChange={(e) => setEmailColumn(e.target.value)}
-              className="p-2 border border-gray-300 rounded-md w-full"
+              className="p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#007A78] hover:border-gray-400 w-full"
             >
               <option value="">Select Column</option>
               {headers.map((header) => (
@@ -125,7 +124,7 @@ const parseCsv = (file: File) => {
 
           <button
             onClick={handleSendInvites}
-            className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="mt-4 px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
           >
             Send Invites
           </button>
