@@ -5,9 +5,9 @@ import React from "react";
 const AdminMenu: React.FC = () => {
   return (
     <div className="flex flex-col h-screen w-64 bg-[#007A78] text-white">
-      {/* Logo Placeholder */}
-      <div className="flex items-center justify-center h-16 border-b border-gray-700">
-        <h1 className="text-xl font-bold">Admin UI</h1>
+      {/* Logo Section */}
+      <div className="flex items-center justify-center h-24 border-b border-gray-700">
+        <img src="/images/dpa_logo.svg" alt="DPA Logo" className="h-16 w-auto" />
       </div>
 
       {/* Menu Items */}
