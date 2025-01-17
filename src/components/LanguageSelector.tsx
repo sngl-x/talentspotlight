@@ -1,8 +1,10 @@
+"use client";
+
 import { useState } from "react";
 
 interface LanguageSelectorProps {
-  currentLanguage: string; // Define type for currentLanguage
-  onSelectLanguage: (language: string) => void; // Define type for onSelectLanguage
+  currentLanguage: string; // Current selected language code
+  onSelectLanguage: (language: string) => void; // Function to handle language change
 }
 
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, onSelectLanguage }) => {
@@ -18,14 +20,17 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
 
   return (
     <div className="relative inline-block text-left">
+      {/* Trigger Button */}
       <button
         type="button"
         onClick={toggleDropdown}
-        className="appearance-none px-4 py-3 w-full max-w-xs text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none hover:border-gray-400 focus:ring-2 focus:ring-gray-300 cursor-pointer flex justify-between items-center"
+        className="appearance-none px-4 py-3 w-full max-w-xs text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none hover:border-secondary focus:ring-2 focus:ring-secondary flex justify-between items-center transition-all"
       >
         {languages.find((lang) => lang.code === currentLanguage)?.label || "Select Language"}
         <svg
-          className={`w-5 h-5 text-gray-500 ml-2 transform ${isOpen ? "rotate-180" : ""}`}
+          className={`w-5 h-5 text-gray-500 ml-2 transform transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -38,17 +43,18 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, on
         </svg>
       </button>
 
+      {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-10">
           {languages.map((lang) => (
             <button
               key={lang.code}
               onClick={() => {
-                onSelectLanguage(lang.code);
-                setIsOpen(false);
+                onSelectLanguage(lang.code); // Notify parent of language change
+                setIsOpen(false); // Close the dropdown
               }}
               className={`block px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-100 ${
-                lang.code === currentLanguage ? "font-bold" : ""
+                lang.code === currentLanguage ? "font-bold text-primary" : ""
               }`}
             >
               {lang.label}
