@@ -50,7 +50,8 @@ const totalQuestions = questions.length + 2; // Include multi-choice questions (
 
 const Questionnaire: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(-1);
-  const [responses, setResponses] = useState<Record<string, number | string[]>>({});
+  const [responses, setResponses] = useState<Record<string, number | number[]>>({});
+  const [selectedCircle, setSelectedCircle] = useState<Record<number, number>>({}); // Tracks selected circle
   const [language, setLanguage] = useState("en");
   const [localizedText, setLocalizedText] = useState<Record<string, Record<string, string | string[]>>>({});
   const [staticText, setStaticText] = useState<StaticText>({});
@@ -76,9 +77,9 @@ const Questionnaire: React.FC = () => {
     setLanguage(event.target.value);
   };
 
-  const handleMultiChoiceChange = (id: string, option: string) => {
+  const handleMultiChoiceChange = (id: string, option: number) => {
     setResponses((prev) => {
-      const selected = Array.isArray(prev[id]) ? (prev[id] as string[]) : [];
+      const selected = Array.isArray(prev[id]) ? (prev[id] as number[]) : [];
       if (selected.includes(option)) {
         return { ...prev, [id]: selected.filter((o) => o !== option) };
       }
@@ -89,9 +90,21 @@ const Questionnaire: React.FC = () => {
     });
   };
 
-  const handleResponseChange = (questionId: number, value: number) => {
-    setResponses((prev) => ({ ...prev, [questionId]: value }));
+const handleResponseChange = (questionId: number, circleIndex: number) => {
+  const valueMapping: Record<number, number> = {
+    1: 5,
+    2: 4,
+    3: 3.5,
+    4: 3.5,
+    5: 2,
+    6: 1,
   };
+  const mappedValue = valueMapping[circleIndex as keyof typeof valueMapping];
+
+  // Update selected circle and corresponding response value
+  setSelectedCircle((prev) => ({ ...prev, [questionId]: circleIndex }));
+  setResponses((prev) => ({ ...prev, [questionId]: mappedValue }));
+};
 
   const handleNext = async () => {
     try {
@@ -189,22 +202,17 @@ const Questionnaire: React.FC = () => {
         <div className="flex flex-col items-center space-y-4">
           {Array.isArray(currentMultiQuestion.options) &&
             currentMultiQuestion.options.map((option: string, index: number) => (
-              <label
+              <button
                 key={index}
-                className="appearance-none px-4 py-2 w-full max-w-xs text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none hover:border-gray-400 focus:ring-2 focus:ring-gray-300 cursor-pointer flex items-center space-x-2"
+                className={`rounded-lg px-4 py-2 w-full max-w-xs text-gray-700 text-center cursor-pointer border transition-all duration-200 ${
+                  Array.isArray(responses[currentMultiQuestionId]) && responses[currentMultiQuestionId].includes(index + 1)
+                    ? "bg-[#007A78] text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+                onClick={() => handleMultiChoiceChange(currentMultiQuestionId, index + 1)}
               >
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={
-                    Array.isArray(responses[currentMultiQuestionId]) &&
-                    (responses[currentMultiQuestionId] as string[]).includes(option)
-                  }
-                  onChange={() => handleMultiChoiceChange(currentMultiQuestionId, option)}
-                  className="mr-2"
-                />
-                <span>{option}</span>
-              </label>
+                {option}
+              </button>
             ))}
         </div>
         <button
@@ -212,14 +220,14 @@ const Questionnaire: React.FC = () => {
           className={`mt-6 px-6 py-3 font-medium rounded-lg transition-all duration-150 ${
             !responses[currentMultiQuestionId] ||
             (Array.isArray(responses[currentMultiQuestionId]) &&
-              (responses[currentMultiQuestionId] as string[]).length === 0)
+              (responses[currentMultiQuestionId] as number[]).length === 0)
               ? "bg-gray-300 text-gray-500 cursor-not-allowed"
               : "bg-[#007A78] text-white hover:bg-[#005F5E]"
           }`}
           disabled={
             !responses[currentMultiQuestionId] ||
             (Array.isArray(responses[currentMultiQuestionId]) &&
-              (responses[currentMultiQuestionId] as string[]).length === 0)
+              (responses[currentMultiQuestionId] as number[]).length === 0)
           }
         >
           {currentQuestionIndex < totalQuestions - 1 ? staticText.nextButton || "Next" : staticText.submitButton || "Submit"}
@@ -253,9 +261,9 @@ const Questionnaire: React.FC = () => {
         <div className="flex justify-center space-x-4 w-1/3">
           {circleSizes.map((size, i) => (
             <button
-              key={              i}
+              key={i}
               className={`rounded-full ${size} ${
-                responses[questions[currentQuestionIndex]?.id] === i + 1
+                selectedCircle[questions[currentQuestionIndex]?.id] === i + 1
                   ? "bg-[#007A78] text-white"
                   : "bg-gray-200"
               }`}
@@ -284,4 +292,3 @@ const Questionnaire: React.FC = () => {
 };
 
 export default Questionnaire;
-
