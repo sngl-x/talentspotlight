@@ -7,7 +7,7 @@ const AdminMenu: React.FC = () => {
     <div className="flex flex-col h-screen w-64 bg-[#007A78] text-white">
       {/* Logo Section */}
       <div className="flex items-center justify-center h-24 border-b border-gray-700">
-        <img src="/images/dpa_logo.svg" alt="DPA Logo" className="h-16 w-auto" />
+        <img src="/images/dpa_logo.svg" alt="DPA Logo" className="h-8 w-auto" /> {/* Reduced height */}
       </div>
 
       {/* Menu Items */}
@@ -28,7 +28,7 @@ const AdminMenu: React.FC = () => {
 
       {/* Footer */}
       <div className="flex items-center justify-center h-16 border-t border-gray-700">
-        <p className="text-sm">© 2025 DPA Assessments</p>
+        <p className="text-sm">© 2025 Lemonaid Insights AB</p>
       </div>
     </div>
   );

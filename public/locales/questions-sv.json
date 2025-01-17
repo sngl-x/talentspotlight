@@ -1,12 +1,14 @@
 {
   "staticText": {
-    "welcomeMessage": "Välkommen till DPA Bedömningsformulär",
+    "welcomeMessage": "Välkommen till DPA Assessment Questionnaire",
+    "instructions": "Enkäten består av 26 olika frågor. Försök att vara så ärlig och neutral som möjligt när du svarar och svara utifrån hur saker och ting är, inte hur du vill att de ska vara. Du kan inte gå tillbaka när du väl har svarat på ett påstående.",
     "startButton": "Starta",
     "nextButton": "Nästa",
     "submitButton": "Skicka",
-    "thankYouMessage": "Tack för att du genomfört undersökningen!",
-    "loadingMessage": "Laddar frågor, vänligen vänta..."
-        "prefixStatement": "I min organisation..."
+"thankYouMessage": "Tack för att du fyllde i undersökningen!",
+    "loadingMessage": "Ladder frågor, vänligen vänta...",
+            "prefixStatement": "I min organisation...",
+            "progressText": "Framsteg:"
   },
 
   "1": {

@@ -1,6 +1,7 @@
 {
   "staticText": {
     "welcomeMessage": "Welcome to the DPA Assessment Questionnaire",
+    "instructions": "The survey consists of 26 different questions. Please try to be as honest and neutral as possible when answering, and respond based on how things are, not how you wish them to be. You cannot go back once you’ve progressed.",
     "startButton": "Start",
     "nextButton": "Next",
     "submitButton": "Submit",

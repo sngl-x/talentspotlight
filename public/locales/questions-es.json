@@ -1,6 +1,7 @@
 {
   "staticText": {
     "welcomeMessage": "Bienvenido al Cuestionario de Evaluación DPA",
+        "instructions": "La encuesta consta de 26 preguntas diferentes. Intenta ser lo más sincero y neutral posible al responder y responde en función de cómo son las cosas, no de cómo te gustaría que fueran. No puedes volver atrás una vez que hayas avanzado.",
     "startButton": "Comenzar",
     "nextButton": "Siguiente",
     "submitButton": "Enviar",
