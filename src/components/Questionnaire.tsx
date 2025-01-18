@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import WelcomeScreen from "./WelcomeScreen";
 import { useSearchParams } from "next/navigation";
-import { LocalizedText, QuestionText } from "../types";
-
+import { LocalizedText, QuestionText, MultiChoiceQuestion } from "../types";
 
 const circleSizes = ["w-14 h-14", "w-12 h-12", "w-10 h-10", "w-10 h-10", "w-12 h-12", "w-14 h-14"];
 const totalQuestions = 25;
@@ -51,19 +50,47 @@ const Questionnaire: React.FC = () => {
     setResponses((prev) => ({ ...prev, [questionId]: valueMapping[circleIndex] }));
   };
 
+  const handleMultiChoiceChange = (id: string, option: number) => {
+    setResponses((prev) => {
+      const selected = Array.isArray(prev[id]) ? (prev[id] as number[]) : [];
+      if (selected.includes(option)) {
+        return { ...prev, [id]: selected.filter((o) => o !== option) };
+      }
+      if (selected.length < 3) {
+        return { ...prev, [id]: [...selected, option] };
+      }
+      return prev;
+    });
+  };
+
   const handleNext = async () => {
     try {
-      const currentQuestionId = currentQuestionIndex + 1;
-      const responseValue = responses[currentQuestionId];
-      await fetch("/api/responses", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          invitationId,
-          questionId: currentQuestionId,
-          responseValue,
-        }),
-      });
+      const isMultiChoice = currentQuestionIndex >= 23;
+      const questionId = currentQuestionIndex + 1;
+
+      if (isMultiChoice) {
+        const multiQuestionId = `q${questionId}`;
+        const selectedOptions = responses[multiQuestionId] || [];
+        await fetch("/api/responses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            invitationId,
+            [multiQuestionId]: selectedOptions,
+          }),
+        });
+      } else {
+        const responseValue = responses[questionId];
+        await fetch("/api/responses", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            invitationId,
+            questionId,
+            responseValue,
+          }),
+        });
+      }
 
       if (currentQuestionIndex < totalQuestions - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -83,6 +110,57 @@ const Questionnaire: React.FC = () => {
         language={language}
         onLanguageChange={handleLanguageChange}
       />
+    );
+  }
+
+  if (currentQuestionIndex >= 23) {
+    const multiQuestionId = `q${currentQuestionIndex + 1}`;
+    const currentMultiQuestion = localizedText[multiQuestionId] as MultiChoiceQuestion | undefined;
+
+    const isResponseValid =
+      Array.isArray(responses[multiQuestionId]) &&
+      (responses[multiQuestionId] as number[]).length > 0;
+
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-6">
+        <div className="bg-white shadow-md rounded-lg p-6 max-w-2xl w-full">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+            {currentMultiQuestion?.title || "Title not available"}
+          </h1>
+          <p className="text-lg text-gray-700 mb-6 text-center">
+            {currentMultiQuestion?.description || "Description not available"}
+          </p>
+          <div className="flex flex-col items-center space-y-4">
+            {currentMultiQuestion?.options.map((option, index) => (
+              <button
+                key={index}
+                className={`rounded-lg px-4 py-2 w-full max-w-xs text-center shadow-sm transition-all duration-200 ${
+                  Array.isArray(responses[multiQuestionId]) &&
+                  (responses[multiQuestionId] as number[]).includes(index + 1)
+                    ? "bg-teal-600 text-white"
+                    : "bg-gray-200 hover:bg-gray-300"
+                }`}
+                onClick={() => handleMultiChoiceChange(multiQuestionId, index + 1)}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={handleNext}
+            className={`mt-6 px-6 py-3 font-medium rounded-lg transition-all duration-150 ${
+              isResponseValid
+                ? "bg-teal-600 text-white hover:bg-teal-700"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+            disabled={!isResponseValid}
+          >
+            {currentQuestionIndex < totalQuestions - 1
+              ? staticText.nextButton || "Next"
+              : staticText.submitButton || "Submit"}
+          </button>
+        </div>
+      </div>
     );
   }
 
