@@ -6,6 +6,7 @@
     "nextButton": "Next",
     "submitButton": "Submit",
 "thankYouMessage": "Thank you for completing the survey!",
+    "completionMessage": "Your responses have been recorded successfully.",
     "loadingMessage": "Loading questions, please wait...",
             "prefixStatement": "In my organization...",
             "progressText": "Progress:"

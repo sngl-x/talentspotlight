@@ -5,7 +5,8 @@
     "startButton": "Starta",
     "nextButton": "Nästa",
     "submitButton": "Skicka",
-"thankYouMessage": "Tack för att du fyllde i undersökningen!",
+"thankYouMessage": "Tack för att du fyllde i DPA undersökningen!",
+    "completionMessage": "Dina svar har registrerats.",
     "loadingMessage": "Ladder frågor, vänligen vänta...",
             "prefixStatement": "I min organisation...",
             "progressText": "Framsteg:"
