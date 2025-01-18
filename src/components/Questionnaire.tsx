@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import WelcomeScreen from "./WelcomeScreen";
+import EndScreen from "./EndScreen";
 import { useSearchParams } from "next/navigation";
 import { LocalizedText, QuestionText, MultiChoiceQuestion } from "../types";
 
@@ -14,6 +15,7 @@ const Questionnaire: React.FC = () => {
   const [selectedCircle, setSelectedCircle] = useState<Record<number, number>>({});
   const [localizedText, setLocalizedText] = useState<LocalizedText | null>(null);
   const [language, setLanguage] = useState("en");
+  const [isComplete, setIsComplete] = useState(false);
   const searchParams = useSearchParams();
   const invitationId = searchParams.get("invitation_id");
 
@@ -94,6 +96,8 @@ const Questionnaire: React.FC = () => {
 
       if (currentQuestionIndex < totalQuestions - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        setIsComplete(true);
       }
     } catch (error) {
       console.error("Error submitting response:", error);
@@ -101,6 +105,10 @@ const Questionnaire: React.FC = () => {
   };
 
   const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+
+  if (isComplete) {
+    return <EndScreen staticText={staticText || {}} />;
+  }
 
   if (currentQuestionIndex === -1) {
     return (
