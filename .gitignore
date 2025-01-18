@@ -33,3 +33,7 @@ coverage/
 
 # Optional: Exclude compiled binaries
 dist/
+
+# Generated context files for ChatGPT
+repo_code.txt
+file_structure.txt
