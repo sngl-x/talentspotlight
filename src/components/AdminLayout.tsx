@@ -7,14 +7,10 @@ const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="flex">
       {/* Sidebar Menu */}
-      <div className="w-64 fixed h-full">
-        <AdminMenu />
-      </div>
+      <AdminMenu />
 
       {/* Main Content */}
-      <div className="flex-1 ml-64 p-6 bg-gray-100">
-        {children}
-      </div>
+      <main className="flex-1 bg-gray-100 p-6">{children}</main>
     </div>
   );
 };
