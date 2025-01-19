@@ -10,24 +10,25 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const organization_id = searchParams.get("organization_id");
 
-  // Explicitly type query values
-  const queryParts: string[] = [];
-  const queryValues: (string | number)[] = [];
-
-  let query = `
-    SELECT i.*, o.name AS organization_name
-    FROM invitations i
-    LEFT JOIN organizations o ON i.organization_id = o.id
+  const query = `
+    SELECT 
+      i.id AS invitation_id, 
+      i.recipient, 
+      i.email, 
+      i.date_sent, 
+      o.name AS organization_name, 
+      i.organization_id
+    FROM 
+      invitations i
+    LEFT JOIN 
+      organizations o ON i.organization_id = o.id
+    WHERE 
+      ($1::int IS NULL OR i.organization_id = $1)
   `;
 
-  if (organization_id) {
-    queryParts.push("i.organization_id = $1");
-    queryValues.push(parseInt(organization_id, 10)); // Ensure type consistency
-  }
-
-  if (queryParts.length > 0) {
-    query += " WHERE " + queryParts.join(" AND ");
-  }
+  const queryValues: (number | null)[] = organization_id
+    ? [parseInt(organization_id, 10)]
+    : [null];
 
   try {
     const client = await pool.connect();
@@ -36,6 +37,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ data: result.rows });
   } catch (error) {
     console.error("Error fetching filtered invitations:", error);
-    return NextResponse.json({ success: false, error: "Failed to fetch filtered invitations" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch filtered invitations" },
+      { status: 500 }
+    );
   }
 }

@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import AdminMenu from "@/components/AdminMenu";
 import CustomRadarChart from "@/components/CustomRadarChart";
-import Button from "@/components/Button";  // Import the reusable Button component
+import Button from "@/components/Button";
+import PageHeader from "@/components/PageHeader";
 
 interface RadarDataPoint {
   category: string;
@@ -16,7 +17,10 @@ const ResponsePage: React.FC = () => {
   const [data, setData] = useState<RadarDataPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [responseDetails, setResponseDetails] = useState<{ invitation_id: string, organization_name: string } | null>(null);
+  const [responseDetails, setResponseDetails] = useState<{
+    invitation_id: string;
+    organization_name: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -74,45 +78,46 @@ const ResponsePage: React.FC = () => {
   return (
     <div className="flex">
       <AdminMenu />
-      <main className="flex-1 p-6 bg-gray-100">
-        {responseDetails ? (
-          <h1 className="text-2xl font-bold mb-4">
-            Response ID: {responseDetails.invitation_id} | Organization: {responseDetails.organization_name}
-          </h1>
-        ) : (
-          <h1 className="text-2xl font-bold mb-4">Loading Response Details...</h1>
-        )}
-
-        <div
-          className="bg-white shadow-lg rounded-lg p-6 flex justify-center items-center"
-          style={{
-            height: "calc(100vh - 150px)", // Adjust height to fit the page
-          }}
-        >
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p className="text-red-500">{error}</p>
-          ) : (
-            <div
-              style={{
-                width: "100%",
-                maxWidth: "800px", // Limit chart width for better layout
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: "20px", // Extra padding around the chart
-              }}
-            >
-              <CustomRadarChart data={data} size={600} maxValue={5} />
-            </div>
-          )}
-        </div>
-
-        {/* Download Button for SVG */}
-        <div className="mt-4">
-          <Button onClick={downloadSVG}>Download Chart as SVG</Button>
+      <main className="flex-1">
+        <PageHeader
+          title="Response Details"
+          description={`Response ID: ${responseDetails?.invitation_id || "Loading..."} | Organization: ${
+            responseDetails?.organization_name || "Loading..."
+          }`}
+        />
+        <div className="p-6 bg-gray-100">
+          {/* Download Button positioned near the chart */}
+          <div className="flex justify-end mb-4">
+            <Button onClick={downloadSVG} className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700">
+              Download Chart as SVG
+            </Button>
+          </div>
+          <div
+            className="bg-white shadow-lg rounded-lg p-6 flex justify-center items-center"
+            style={{
+              height: "calc(100vh - 250px)", // Adjust height to fit the page
+            }}
+          >
+            {loading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  maxWidth: "800px", // Limit chart width for better layout
+                  height: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "20px", // Extra padding around the chart
+                }}
+              >
+                <CustomRadarChart data={data} size={600} maxValue={5} />
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>
