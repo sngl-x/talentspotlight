@@ -75,7 +75,14 @@ const AdminMenu: React.FC = () => {
       {/* Footer */}
       {!isCollapsed && (
         <div className="flex items-center justify-center h-16 border-t border-gray-700">
-          <p className="text-sm">© 2025 Lemonaid Insights AB</p>
+          <a
+            href="https://lemonaid.se"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm hover:underline"
+          >
+            © 2025 Lemonaid Insights AB
+          </a>
         </div>
       )}
     </div>
