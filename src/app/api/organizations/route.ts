@@ -7,32 +7,25 @@ const pool = new Pool({
 });
 
 export async function GET() {
+  const client = await pool.connect();
+
   try {
     const query = `
-      SELECT 
-        o.id, 
-        o.name, 
-        o.size, 
-        o.industry, 
-        u.first_name || ' ' || u.last_name AS contact_person
-      FROM 
-        organizations o
-      LEFT JOIN 
-        users u 
-      ON 
-        o.contact_person_id = u.id
-      ORDER BY 
-        o.name;
+      SELECT id, name, location, size, industry, type
+      FROM organizations
+      ORDER BY id;
     `;
 
-    const result = await pool.query(query);
+    const result = await client.query(query);
 
-    return NextResponse.json({ data: result.rows });
+    return NextResponse.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching organizations:", error);
     return NextResponse.json(
       { success: false, error: "Failed to fetch organizations" },
       { status: 500 }
     );
+  } finally {
+    client.release();
   }
 }
