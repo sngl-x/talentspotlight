@@ -132,8 +132,7 @@ const OrganizationPage: React.FC = () => {
         {isInviteModalOpen && (
           <Modal
   onClose={closeInviteModal}
-  title={`Add One User for ${organization?.name}`}
-  hideCloseButton // Pass this prop to hide the "Close" button
+  title={`Invite User for ${organization?.name}`}
 >
   <form
     onSubmit={(e) => {
@@ -141,41 +140,43 @@ const OrganizationPage: React.FC = () => {
       alert("User invited!");
       closeInviteModal();
     }}
+    className="space-y-4"
   >
-    <label className="block mb-4">
-      Name:
+    <div>
+      <label className="block text-sm font-medium text-gray-700">Name</label>
       <input
         type="text"
-        className="border border-gray-300 rounded w-full p-2 mt-1"
+        placeholder="Enter full name"
+        className="w-full border border-gray-300 rounded px-4 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
         required
       />
-    </label>
-    <label className="block mb-4">
-      Email:
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-700">Email</label>
       <input
         type="email"
-        className="border border-gray-300 rounded w-full p-2 mt-1"
+        placeholder="Enter email address"
+        className="w-full border border-gray-300 rounded px-4 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
         required
       />
-    </label>
-    <div className="flex justify-end gap-4">
-      <button
+    </div>
+    <div className="flex justify-end gap-4 mt-4">
+      <Button
         type="button"
         className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
         onClick={closeInviteModal}
       >
         Cancel
-      </button>
-      <button
+      </Button>
+      <Button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
       >
         Send Invitation
-      </button>
+      </Button>
     </div>
   </form>
 </Modal>
-
         )}
 
         {/* Bulk Import Modal */}
@@ -183,7 +184,6 @@ const OrganizationPage: React.FC = () => {
 <Modal
   onClose={closeCsvUploader}
   title={`Bulk Import Users for ${organization?.name}`}
-  hideCloseButton
 >
   <CsvUploader />
 </Modal>

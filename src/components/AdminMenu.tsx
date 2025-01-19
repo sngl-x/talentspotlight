@@ -28,12 +28,12 @@ const AdminMenu: React.FC = () => {
 
   return (
     <div
-      className={`h-screen bg-[#007A78] text-white transition-all duration-300 ${
+      className={`h-screen bg-teal-700 text-white transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
-      }`}
+      } shadow-lg`}
     >
       {/* Toggle Button */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+      <div className="flex items-center justify-between px-4 py-3 bg-teal-800">
         <button onClick={toggleMenu} aria-label="Toggle Menu">
           {isCollapsed ? (
             <Bars3Icon className="h-6 w-6 text-white" />
@@ -45,7 +45,7 @@ const AdminMenu: React.FC = () => {
 
       {/* Logo */}
       {!isCollapsed && (
-        <div className="flex items-center justify-center h-24 border-b border-gray-700">
+        <div className="flex items-center justify-center h-24 bg-teal-800">
           <Image
             src="/images/dpa_logo.svg"
             alt="DPA Logo"
@@ -56,13 +56,13 @@ const AdminMenu: React.FC = () => {
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto p-4">
+      <nav className="flex-1 overflow-y-auto p-4 bg-teal-700">
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.name}>
               <Link
                 href={item.href}
-                className="flex items-center px-4 py-2 rounded hover:bg-[#005F5E] transition duration-300"
+                className="flex items-center px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300"
               >
                 <item.icon className="h-6 w-6 text-white" />
                 {!isCollapsed && <span className="ml-3">{item.name}</span>}
@@ -74,14 +74,14 @@ const AdminMenu: React.FC = () => {
 
       {/* Footer */}
       {!isCollapsed && (
-        <div className="flex items-center justify-center h-16 border-t border-gray-700">
+        <div className="flex flex-col items-center justify-center h-20 bg-teal-800">
           <a
             href="https://lemonaid.se"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm hover:underline"
+            className="text-sm text-gray-300 hover:text-white hover:underline"
           >
-            © 2025 Lemonaid Insights AB
+            Powered by Lemonaid
           </a>
         </div>
       )}
