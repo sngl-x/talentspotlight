@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import AdminLayout from "@/components/AdminLayout";
 import Link from "next/link";
+import { EnvelopeIcon, DocumentDuplicateIcon, BuildingOfficeIcon } from "@heroicons/react/24/outline";
 
 const AdminPage: React.FC = () => {
   const [stats, setStats] = useState({
@@ -31,7 +32,6 @@ const AdminPage: React.FC = () => {
         const responsesData = await responsesRes.json();
         const organizationsData = await organizationsRes.json();
 
-        // Safely access `data` and default to an empty array if undefined
         setStats({
           invitations: invitationsData?.data?.length || 0,
           responses: responsesData?.data?.length || 0,
@@ -71,9 +71,7 @@ const AdminPage: React.FC = () => {
               className="group block bg-white shadow rounded-lg p-6 hover:shadow-lg transition duration-300"
             >
               <div className="flex items-center">
-                <div className="flex-shrink-0 h-12 w-12 bg-[#E3FF00] text-gray-900 flex items-center justify-center rounded-full">
-                  <span className="text-lg font-bold">I</span>
-                </div>
+                <EnvelopeIcon className="h-10 w-10 text-[#E3FF00] group-hover:text-[#C5E500] transition duration-300" />
                 <div className="ml-4">
                   <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[#29AFCA]">
                     {stats.invitations}
@@ -89,9 +87,7 @@ const AdminPage: React.FC = () => {
               className="group block bg-white shadow rounded-lg p-6 hover:shadow-lg transition duration-300"
             >
               <div className="flex items-center">
-                <div className="flex-shrink-0 h-12 w-12 bg-[#29AFCA] text-white flex items-center justify-center rounded-full">
-                  <span className="text-lg font-bold">R</span>
-                </div>
+                <DocumentDuplicateIcon className="h-10 w-10 text-[#29AFCA] group-hover:text-[#2497AF] transition duration-300" />
                 <div className="ml-4">
                   <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[#2497AF]">
                     {stats.responses}
@@ -107,9 +103,7 @@ const AdminPage: React.FC = () => {
               className="group block bg-white shadow rounded-lg p-6 hover:shadow-lg transition duration-300"
             >
               <div className="flex items-center">
-                <div className="flex-shrink-0 h-12 w-12 bg-[#2497AF] text-white flex items-center justify-center rounded-full">
-                  <span className="text-lg font-bold">O</span>
-                </div>
+                <BuildingOfficeIcon className="h-10 w-10 text-[#2497AF] group-hover:text-[#29AFCA] transition duration-300" />
                 <div className="ml-4">
                   <h2 className="text-2xl font-bold text-gray-800 group-hover:text-[#29AFCA]">
                     {stats.organizations}
