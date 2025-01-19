@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Pool } from "pg";
 
-// Create a database pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },

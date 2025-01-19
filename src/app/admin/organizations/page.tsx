@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import AdminMenu from "@/components/AdminMenu";
 import Button from "@/components/Button";
-import Link from "next/link"; // Make sure this is imported
+import Link from "next/link";
 
 interface Organization {
   id: string;
@@ -63,12 +63,12 @@ const OrganizationsPage: React.FC = () => {
                   <strong>Contact:</strong> {organization.contact_person || "N/A"}
                 </p>
                 <Button
-  as={Link}
-  href={`/admin/organizations/${organization.id}`}
-  variant="primary" // DPA Blue
->
-  View Details
-</Button>
+                  as={Link}
+                  href={`/admin/organizations/${organization.id}`}
+                  variant="primary"
+                >
+                  View Details
+                </Button>
               </div>
             ))}
           </div>
