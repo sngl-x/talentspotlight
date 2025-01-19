@@ -52,26 +52,26 @@ const CsvUploader: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">CSV Uploader</h1>
+    <div className="flex flex-col items-center justify-center p-4 bg-gray-50 max-w-3xl mx-auto">
+      <h1 className="text-xl font-bold text-gray-900 mb-4">CSV Uploader</h1>
 
       <input
         type="file"
         accept=".csv"
         onChange={handleFileUpload}
-        className="mb-4 p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#007A78] hover:border-gray-400"
+        className="mb-4 p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#29AFCA] hover:border-gray-400"
       />
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {headers.length > 0 && (
-        <div className="flex flex-col items-center w-full max-w-2xl">
-          <div className="mb-4 w-full">
+        <div className="flex flex-col w-full">
+          <div className="mb-4">
             <label className="block text-gray-700 mb-2">Select Name Column</label>
             <select
               value={nameColumn || ""}
               onChange={(e) => setNameColumn(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#007A78] hover:border-gray-400 w-full"
+              className="p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#29AFCA] hover:border-gray-400 w-full"
             >
               <option value="">Select Column</option>
               {headers.map((header) => (
@@ -82,12 +82,12 @@ const CsvUploader: React.FC = () => {
             </select>
           </div>
 
-          <div className="mb-4 w-full">
+          <div className="mb-4">
             <label className="block text-gray-700 mb-2">Select Email Column</label>
             <select
               value={emailColumn || ""}
               onChange={(e) => setEmailColumn(e.target.value)}
-              className="p-3 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#007A78] hover:border-gray-400 w-full"
+              className="p-2 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-[#29AFCA] hover:border-gray-400 w-full"
             >
               <option value="">Select Column</option>
               {headers.map((header) => (
@@ -99,7 +99,7 @@ const CsvUploader: React.FC = () => {
           </div>
 
           <h2 className="text-lg font-medium text-gray-900 mb-4">Preview Data</h2>
-          <div className="overflow-x-auto w-full">
+          <div className="overflow-x-auto w-full max-h-64">
             <table className="table-auto w-full border border-gray-300">
               <thead>
                 <tr>
@@ -124,7 +124,7 @@ const CsvUploader: React.FC = () => {
 
           <button
             onClick={handleSendInvites}
-            className="mt-4 px-6 py-3 font-medium text-white bg-[#007A78] rounded-lg hover:bg-[#005F5E] transition-all duration-150"
+            className="mt-4 px-6 py-2 font-medium text-white bg-[#29AFCA] rounded-lg hover:bg-[#2497AF] transition-all duration-150"
           >
             Send Invites
           </button>
