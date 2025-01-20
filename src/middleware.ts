@@ -1,17 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function middleware(request: Request) {
-  const url = new URL(request.url);
+export async function middleware(request: NextRequest) {
+  const url = request.nextUrl;
 
-  // Exclude admin routes
   if (url.pathname.startsWith("/admin")) {
-    return NextResponse.next();
+    // Check for a valid session token
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+
+    // If no token, redirect to /auth/signin
+    if (!token) {
+      url.pathname = "/auth/signin";
+      return NextResponse.redirect(url);
+    }
   }
 
-  // Other middleware logic here
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: ["/admin/:path*"], // Apply middleware to all "/admin" subroutes
-};

@@ -1,9 +1,7 @@
-import './globals.css';
+"use client";
 
-export const metadata = {
-  title: 'DPA Assessment',
-  description: 'Collection of data for DPA.',
-};
+import './globals.css';
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({
   children,
@@ -12,7 +10,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

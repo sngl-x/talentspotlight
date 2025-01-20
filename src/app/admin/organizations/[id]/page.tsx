@@ -94,7 +94,7 @@ const OrganizationPage: React.FC = () => {
               <strong>Contact Person:</strong> {organization?.contactPerson}
             </p>
             <div className="flex mt-4 gap-4">
-              <Button onClick={openInviteModal}>Invite User</Button>
+              <Button onClick={openInviteModal}>Invite Respondent</Button>
               <Button
                 className="bg-[#29AFCA] text-white hover:bg-[#2497AF]"
                 onClick={openCsvUploader}
