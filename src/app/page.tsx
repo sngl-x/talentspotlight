@@ -13,7 +13,7 @@ const LandingPage: React.FC = () => {
           <div className="flex justify-center mb-6">
             <Image src="/images/dpa_logo.svg" alt="DPA Logo" width={200} height={50} />
           </div>
-          <h1 className="text-5xl font-extrabold">Unlock Organizational Potential</h1>
+          <h1 className="text-5xl font-extrabold">Unlock organizational potential</h1>
           <p className="mt-4 text-xl text-gray-300">
             Engage with 25 key questions to gain insights in just 10 minutes.
           </p>
@@ -24,7 +24,7 @@ const LandingPage: React.FC = () => {
       <main className="container mx-auto px-6 py-12">
         {/* About the Assessment */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-[#007A78] mb-6">Why Take This Assessment?</h2>
+          <h2 className="text-3xl font-bold text-[#007A78] mb-6">Why take this assessment?</h2>
           <p className="text-lg leading-relaxed text-gray-700 mb-6">
             The DP Assessment provides a snapshot of your organization’s strengths and opportunities. By answering 25 carefully crafted questions, you’ll uncover actionable insights to drive meaningful change and foster growth.
           </p>
@@ -57,7 +57,7 @@ const LandingPage: React.FC = () => {
 
         {/* Call to Action */}
         <section className="text-center py-12 bg-[#007A78] text-white rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">Start Your Assessment Now</h2>
+          <h2 className="text-2xl font-bold mb-4">Start your assessment now</h2>
           <p className="text-lg mb-6">
             Take the first step toward transforming your organization.
           </p>
