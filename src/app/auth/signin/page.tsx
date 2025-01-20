@@ -53,8 +53,8 @@ const SignIn = () => {
           <Image
             src="/images/dpa_logo.svg" // Your logo file path
             alt="DPA Logo"
-            width={120} // Adjust the width of the logo
-            height={120} // Adjust the height of the logo
+            width={300} // Adjust the width of the logo
+            height={300} // Adjust the height of the logo
           />
         </div>
         <h1 className="text-3xl font-semibold text-center text-teal-600 mb-6">Sign In</h1>

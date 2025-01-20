@@ -58,8 +58,8 @@ const AdminMenu: React.FC = () => {
           <Image
             src="/images/dpa_logo.svg"
             alt="DPA Logo"
-            width={128}
-            height={64}
+            width={200}
+            height={100}
           />
         </div>
       )}
@@ -90,7 +90,7 @@ const AdminMenu: React.FC = () => {
         >
           <UserIcon className="h-6 w-6 text-white" />
           {/* Show user name only if not collapsed */}
-          <span className={`ml-3 ${isCollapsed ? "hidden" : ""}`}>{session?.user?.name || "User"}</span>
+          <span className={`ml-3 ${isCollapsed ? "hidden" : ""}`}>{session?.user?.name || "Settings"}</span>
         </button>
 
         {userMenuOpen && (
