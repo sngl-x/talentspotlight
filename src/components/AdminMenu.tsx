@@ -28,7 +28,7 @@ const AdminMenu: React.FC = () => {
 
   return (
     <div
-      className={`h-screen bg-teal-700 text-white transition-all duration-300 ${
+      className={`h-screen bg-teal-700 text-white flex flex-col transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
       } shadow-lg`}
     >
@@ -73,18 +73,16 @@ const AdminMenu: React.FC = () => {
       </nav>
 
       {/* Footer */}
-      {!isCollapsed && (
-        <div className="flex flex-col items-center justify-center h-20 bg-teal-800">
-          <a
-            href="https://lemonaid.se"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-gray-300 hover:text-white hover:underline"
-          >
-            Powered by Lemonaid
-          </a>
-        </div>
-      )}
+      <div className="mt-auto bg-teal-800 p-4">
+        <a
+          href="https://lemonaid.se"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-gray-300 hover:text-white hover:underline"
+        >
+          Powered by Lemonaid
+        </a>
+      </div>
     </div>
   );
 };
