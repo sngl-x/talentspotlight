@@ -61,14 +61,14 @@ const LandingPage: React.FC = () => {
           <p className="text-lg mb-6 font-[Montserrat]">
             Take the first step toward transforming your organization.
           </p>
-          <Button className="bg-[#E3FF00] text-[#007A78] hover:bg-[#D7F200] px-6 py-3 rounded-lg font-bold">
+          <Button className="bg-[#29AFCA] text-white hover:bg-[#218D9C] px-6 py-3 rounded-lg font-bold">
             Begin Assessment
           </Button>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-6">
+      <footer className="bg-[#E3FF00] text-gray-800 py-6">
         <div className="container mx-auto px-6 text-center">
           <p className="text-sm font-[Montserrat]">
             &copy; {new Date().getFullYear()} <a href="https://lemonaid.se" className="text-[#29AFCA] hover:underline">Lemonaid Insights AB</a>. All rights reserved.
