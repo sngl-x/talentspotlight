@@ -4,17 +4,31 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl;
 
-  if (url.pathname.startsWith("/admin")) {
-    // Check for a valid session token
+  // Exkludera NextAuth endpoints från middleware
+  if (url.pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
+  }
+
+  // Skydda alla /admin och /api endpoints
+  if (url.pathname.startsWith("/admin") || url.pathname.startsWith("/api")) {
+    // Kontrollera giltig session-token
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    // If no token, redirect to /auth/signin
+    // Om ingen token finns, omdirigera till login-sidan för admin eller blockera för API
     if (!token) {
-      url.pathname = "/auth/signin";
-      return NextResponse.redirect(url);
+      if (url.pathname.startsWith("/admin")) {
+        url.pathname = "/auth/signin";
+        return NextResponse.redirect(url);
+      }
+
+      // Blockera åtkomst för /api
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
     }
   }
 
