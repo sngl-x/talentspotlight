@@ -71,7 +71,7 @@ const AdminMenu: React.FC = () => {
             <li key={item.name}>
               <Link
                 href={item.href}
-                className="flex items-center px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300"
+                className="flex items-center px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300 font-[Quicksand]"
               >
                 <item.icon className="h-6 w-6 text-white" />
                 {/* Show text only if not collapsed */}
@@ -86,7 +86,7 @@ const AdminMenu: React.FC = () => {
       <div className="relative mt-auto bg-teal-800 p-4">
         <button
           onClick={toggleUserMenu}
-          className="flex items-center w-full px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300"
+          className="flex items-center w-full px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300 font-[Quicksand]"
         >
           <UserIcon className="h-6 w-6 text-white" />
           {/* Show user name only if not collapsed */}
@@ -95,14 +95,14 @@ const AdminMenu: React.FC = () => {
 
         {userMenuOpen && (
           <div className="absolute bottom-16 left-4 w-56 bg-white text-gray-800 shadow-lg rounded-md">
-            <div className="px-4 py-2 border-b">
+            <div className="px-4 py-2 border-b font-[Quicksand]">
               <p className="text-sm font-medium">{session?.user?.email}</p>
             </div>
             <ul className="py-2">
               <li>
                 <Link
                   href="/admin/profile"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                  className="block px-4 py-2 hover:bg-gray-100 font-[Quicksand]"
                 >
                   Profile
                 </Link>
@@ -110,7 +110,7 @@ const AdminMenu: React.FC = () => {
               <li>
                 <button
                   onClick={() => signOut()}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 font-[Quicksand]"
                 >
                   Sign Out
                 </button>
