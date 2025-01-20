@@ -11,7 +11,7 @@ const LandingPage: React.FC = () => {
       <header className="bg-[#007A78] text-white py-12">
         <div className="container mx-auto px-6 text-center">
           <div className="flex justify-center mb-6">
-            <Image src="/images/dpa_logo.svg" alt="DPA Logo" width={200} height={50} />
+            <Image src="/images/dpa_logo.svg" alt="DPA Logo" width={300} height={150} />
           </div>
           <h1 className="text-5xl font-extrabold">Unlock organizational potential</h1>
           <p className="mt-4 text-xl text-gray-300">
