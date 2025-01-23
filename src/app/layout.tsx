@@ -1,24 +1,18 @@
 "use client";
 
-import { Quicksand, Montserrat } from 'next/font/google';
+import { Nunito } from 'next/font/google';
 import { SessionProvider } from 'next-auth/react';
 import './globals.css';
 
-const quicksand = Quicksand({
+const nunito = Nunito({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
-  variable: '--font-quicksand',
-});
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-montserrat',
+  variable: '--font-nunito',
 });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${quicksand.variable} ${montserrat.variable}`}>
+    <html lang="en" className={`${nunito.variable}`}>
       <body>
         <SessionProvider>{children}</SessionProvider>
       </body>

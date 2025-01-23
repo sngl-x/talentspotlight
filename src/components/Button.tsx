@@ -6,7 +6,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string; // Used when `as` is `Link`
   children: React.ReactNode;
   className?: string; // Additional styling
-  variant?: "primary" | "secondary"; // DPA-specific variants
+  variant?: "primary" | "secondary"; // Button variants
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -14,14 +14,14 @@ const Button: React.FC<ButtonProps> = ({
   href,
   children,
   className = "",
-  variant = "primary", // Default to primary (DPA green)
+  variant = "primary",
   ...props
 }) => {
-  const baseClass = "px-4 py-2 rounded transition duration-300";
+  const baseClass = "px-4 py-2 rounded transition duration-300 font-nunito";
 
   const variantClasses = {
-    primary: "bg-[#29AFCA] text-white hover:bg-[#2497AF]", // DPA Blue
-    secondary: "bg-[#E3FF00] text-gray-900 hover:bg-[#C5E500]", // DPA Green
+    primary: "bg-primary text-secondary hover:bg-secondary hover:text-primary",
+    secondary: "bg-secondary text-primary hover:bg-primary hover:text-secondary",
   };
 
   const combinedClass = `${baseClass} ${variantClasses[variant]} ${className}`;

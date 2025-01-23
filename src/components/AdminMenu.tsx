@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  HomeIcon,
-  EnvelopeIcon,
-  DocumentDuplicateIcon,
-  BuildingOfficeIcon,
+  LightBulbIcon,
+  CheckCircleIcon,
+  UserGroupIcon,
+  ChatBubbleOvalLeftEllipsisIcon,
   Bars3Icon,
   XMarkIcon,
   UserIcon,
@@ -29,32 +29,32 @@ const AdminMenu: React.FC = () => {
   };
 
   const menuItems = [
-    { name: "Dashboard", href: "/admin", icon: HomeIcon },
-    { name: "Invitations", href: "/admin/invitations", icon: EnvelopeIcon },
-    { name: "Responses", href: "/admin/responses", icon: DocumentDuplicateIcon },
-    { name: "Organizations", href: "/admin/organizations", icon: BuildingOfficeIcon },
+    { name: "Spotlight", href: "/admin/spotlight", icon: LightBulbIcon },
+    { name: "Select", href: "/admin/select", icon: CheckCircleIcon },
+    { name: "Connect", href: "/admin/connect", icon: UserGroupIcon },
+    { name: "Engage", href: "/admin/engage", icon: ChatBubbleOvalLeftEllipsisIcon },
   ];
 
   return (
     <div
-      className={`h-screen bg-teal-700 text-white flex flex-col transition-all duration-300 ${
+      className={`h-screen bg-white text-primary flex flex-col transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
-      } shadow-lg`}
+      } shadow-lg border-r border-primary font-nunito`}
     >
       {/* Toggle Button */}
-      <div className="flex items-center justify-between px-4 py-3 bg-teal-800">
+      <div className="flex items-center justify-between px-4 py-3">
         <button onClick={toggleMenu} aria-label="Toggle Menu">
           {isCollapsed ? (
-            <Bars3Icon className="h-6 w-6 text-white" />
+            <Bars3Icon className="h-8 w-8 text-primary" />
           ) : (
-            <XMarkIcon className="h-6 w-6 text-white" />
+            <XMarkIcon className="h-8 w-8 text-primary" />
           )}
         </button>
       </div>
 
       {/* Logo */}
       {!isCollapsed && (
-        <div className="flex items-center justify-center h-24 bg-teal-800">
+        <div className="flex items-center justify-center h-24 bg-white">
           <Image
             src="/images/dpa_logo.svg"
             alt="DPA Logo"
@@ -65,15 +65,19 @@ const AdminMenu: React.FC = () => {
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto p-4 bg-teal-700">
+      <nav className="flex-1 overflow-y-auto p-4 bg-white">
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.name}>
               <Link
                 href={item.href}
-                className="flex items-center px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300 font-[Quicksand]"
+                className="flex items-center px-4 py-2 rounded-md text-primary hover:text-secondary hover:bg-primary transition duration-300 font-nunito"
               >
-                <item.icon className="h-6 w-6 text-white" />
+                <item.icon
+                  className={`h-8 w-8 text-primary hover:text-secondary ${
+                    isCollapsed ? "mx-auto" : ""
+                  }`}
+                />
                 {/* Show text only if not collapsed */}
                 <span className={`ml-3 ${isCollapsed ? "hidden" : ""}`}>{item.name}</span>
               </Link>
@@ -83,26 +87,26 @@ const AdminMenu: React.FC = () => {
       </nav>
 
       {/* User Menu */}
-      <div className="relative mt-auto bg-teal-800 p-4">
+      <div className="relative mt-auto bg-primary p-4">
         <button
           onClick={toggleUserMenu}
-          className="flex items-center w-full px-4 py-2 rounded-md hover:bg-teal-600 transition duration-300 font-[Quicksand]"
+          className="flex items-center w-full px-4 py-2 rounded-md text-secondary hover:text-primary hover:bg-secondary transition duration-300 font-nunito"
         >
-          <UserIcon className="h-6 w-6 text-white" />
+          <UserIcon className="h-8 w-8 text-secondary hover:text-primary" />
           {/* Show user name only if not collapsed */}
           <span className={`ml-3 ${isCollapsed ? "hidden" : ""}`}>{session?.user?.name || "Settings"}</span>
         </button>
 
         {userMenuOpen && (
           <div className="absolute bottom-16 left-4 w-56 bg-white text-gray-800 shadow-lg rounded-md">
-            <div className="px-4 py-2 border-b font-[Quicksand]">
+            <div className="px-4 py-2 border-b font-nunito">
               <p className="text-sm font-medium">{session?.user?.email}</p>
             </div>
             <ul className="py-2">
               <li>
                 <Link
                   href="/admin/profile"
-                  className="block px-4 py-2 hover:bg-gray-100 font-[Quicksand]"
+                  className="block px-4 py-2 hover:bg-gray-100 font-nunito"
                 >
                   Profile
                 </Link>
@@ -110,7 +114,7 @@ const AdminMenu: React.FC = () => {
               <li>
                 <button
                   onClick={() => signOut()}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 font-[Quicksand]"
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 font-nunito"
                 >
                   Sign Out
                 </button>

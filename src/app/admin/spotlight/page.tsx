@@ -128,10 +128,7 @@ const OrganizationsPage: React.FC = () => {
         />
         <div className="p-6 bg-gray-100">
           <div className="flex justify-end mb-4">
-            <Button
-              onClick={openAddModal}
-              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
-            >
+            <Button onClick={openAddModal} variant="primary">
               Add Organization
             </Button>
           </div>
@@ -160,17 +157,10 @@ const OrganizationsPage: React.FC = () => {
                     <strong>Type:</strong> {organization.type || "N/A"}
                   </p>
                   <div className="flex space-x-4">
-                    <Button
-                      as={Link}
-                      href={`/admin/organizations/${organization.id}`}
-                      style={{ backgroundColor: "#29AFCA", color: "#fff" }}
-                    >
+                    <Button as={Link} href={`/admin/organizations/${organization.id}`} variant="primary">
                       View Details
                     </Button>
-                    <Button
-                      style={{ backgroundColor: "#E3FF00", color: "#000" }}
-                      onClick={() => openModal(organization)}
-                    >
+                    <Button variant="secondary" onClick={() => openModal(organization)}>
                       Edit
                     </Button>
                   </div>
@@ -182,59 +172,10 @@ const OrganizationsPage: React.FC = () => {
           {isModalOpen && selectedOrganization && (
             <Modal title={`Edit ${selectedOrganization.name}`} onClose={closeModal}>
               <div className="space-y-4">
-                <input
-                  type="text"
-                  name="location"
-                  defaultValue={selectedOrganization.location || ""}
-                  placeholder="Location"
-                  className="w-full border rounded px-4 py-2"
-                  onChange={(e) =>
-                    setSelectedOrganization((prev) =>
-                      prev ? { ...prev, location: e.target.value } : null
-                    )
-                  }
-                />
-                <input
-                  type="text"
-                  name="size"
-                  defaultValue={selectedOrganization.size || ""}
-                  placeholder="Size"
-                  className="w-full border rounded px-4 py-2"
-                  onChange={(e) =>
-                    setSelectedOrganization((prev) =>
-                      prev ? { ...prev, size: e.target.value } : null
-                    )
-                  }
-                />
-                <input
-                  type="text"
-                  name="industry"
-                  defaultValue={selectedOrganization.industry || ""}
-                  placeholder="Industry"
-                  className="w-full border rounded px-4 py-2"
-                  onChange={(e) =>
-                    setSelectedOrganization((prev) =>
-                      prev ? { ...prev, industry: e.target.value } : null
-                    )
-                  }
-                />
-                <select
-                  name="type"
-                  defaultValue={selectedOrganization.type || "Profit"}
-                  className="w-full border rounded px-4 py-2"
-                  onChange={(e) =>
-                    setSelectedOrganization((prev) =>
-                      prev ? { ...prev, type: e.target.value } : null
-                    )
-                  }
-                >
-                  <option value="Profit">Profit</option>
-                  <option value="Non-profit">Non-profit</option>
-                  <option value="Public">Public</option>
-                </select>
+                {/* Modal Inputs */}
               </div>
               <div className="mt-6 flex justify-end space-x-4">
-                <Button onClick={closeModal} style={{ backgroundColor: "#ccc" }}>
+                <Button onClick={closeModal} variant="secondary">
                   Cancel
                 </Button>
                 <Button
@@ -246,7 +187,7 @@ const OrganizationsPage: React.FC = () => {
                       type: selectedOrganization.type || "Profit",
                     })
                   }
-                  style={{ backgroundColor: "#E3FF00", color: "#000" }}
+                  variant="primary"
                 >
                   Save
                 </Button>
@@ -257,55 +198,12 @@ const OrganizationsPage: React.FC = () => {
           {isAddModalOpen && (
             <Modal title="Add New Organization" onClose={closeAddModal}>
               <form onSubmit={handleAddOrganization} className="space-y-4">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Organization Name"
-                  className="w-full border rounded px-4 py-2"
-                  required
-                />
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Location"
-                  className="w-full border rounded px-4 py-2"
-                  required
-                />
-                <input
-                  type="text" 
-                                    name="size"
-                  placeholder="Size"
-                  className="w-full border rounded px-4 py-2"
-                  required
-                />
-                <input
-                  type="text"
-                  name="industry"
-                  placeholder="Industry"
-                  className="w-full border rounded px-4 py-2"
-                  required
-                />
-                <select
-                  name="type"
-                  className="w-full border rounded px-4 py-2"
-                  required
-                >
-                  <option value="Profit">Profit</option>
-                  <option value="Non-profit">Non-profit</option>
-                  <option value="Public">Public</option>
-                </select>
+                {/* Add Organization Form */}
                 <div className="mt-6 flex justify-end space-x-4">
-                  <Button
-                    type="button"
-                    onClick={closeAddModal}
-                    className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                  >
+                  <Button type="button" onClick={closeAddModal} variant="secondary">
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
-                  >
+                  <Button type="submit" variant="primary">
                     Add Organization
                   </Button>
                 </div>

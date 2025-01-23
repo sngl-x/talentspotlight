@@ -5,8 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-montserrat: 'Montserrat', sans-serif;
-  --font-quicksand: 'Quicksand', sans-serif;
+  --font-nunito: 'Nunito', sans-serif; /* Use Nunito as the default font */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,15 +16,11 @@
 }
 
 body {
-  font-family: var(--font-montserrat);
+  font-family: var(--font-nunito);
   background-color: var(--background);
   color: var(--foreground);
 }
 
-.font-quicksand {
-  font-family: var(--font-quicksand);
-}
-
-.font-montserrat {
-  font-family: var(--font-montserrat);
+.font-nunito {
+  font-family: var(--font-nunito);
 }

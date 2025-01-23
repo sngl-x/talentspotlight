@@ -4,39 +4,38 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#007a78', // Main teal from the logo
-        secondary: '#29AFCA', // Complementary color
-        accent: '#E3FF00', // Optional highlight color
-        background: '#FFFFFF', // Default background color
-        dark: '#1A202C', // Dark mode base
+        primary: '#007BFF', // Ny primärfärg
+        secondary: '#E6F7FF', // Ny sekundärfärg
+        accent: '#007BFF', // Valfritt, samma som primär för konsekvens
+        background: '#FFFFFF', // Behåll standard bakgrundsfärg
+        dark: '#1A202C', // För mörkt tema
         gray: {
-          100: '#F7FAFC', // Light gray for backgrounds
-          200: '#EDF2F7',
-          300: '#E2E8F0',
-          400: '#CBD5E0',
-          500: '#A0AEC0', // Medium gray for text
+          100: '#E6F7FF', // Ljusa gråtoner kan matchas med sekundärfärgen
+          200: '#E6F7FF',
+          300: '#E6F7FF',
+          400: '#E6F7FF',
+          500: '#007BFF', // Medium gråtoner kan matchas med primärfärgen
         },
       },
       fontFamily: {
-        montserrat: ['Montserrat', 'sans-serif'], // Default font
-        quicksand: ['Quicksand', 'sans-serif'], // Optional secondary font
+        nunito: ['Nunito', 'sans-serif'], // Ny font
       },
       boxShadow: {
-        card: '0 4px 6px rgba(0, 0, 0, 0.1)', // Soft shadow for cards
-        header: '0 2px 4px rgba(0, 0, 0, 0.1)', // Subtle shadow for headers
+        card: '0 4px 6px rgba(0, 0, 0, 0.1)', // Behåll skuggor som de är
+        header: '0 2px 4px rgba(0, 0, 0, 0.1)',
       },
       transitionDuration: {
-        150: '150ms', // Transition timing for hover effects
+        150: '150ms',
         300: '300ms',
       },
       transitionTimingFunction: {
-        easeInOut: 'ease-in-out', // Smooth transition for hover effects
+        easeInOut: 'ease-in-out',
       },
     },
   },
   plugins: [
-    require('@tailwindcss/typography'), // Adds typography styles
-    require('@tailwindcss/forms'), // Enhances form elements
-    require('@tailwindcss/aspect-ratio'), // Adds aspect-ratio utilities
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
   ],
 };
